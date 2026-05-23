@@ -17,7 +17,7 @@
 
 使用 `opencode debug skill` 可確認所有 Skills 已載入。
 
-## 包含 25 個 Skills
+## 包含 26 個 Skills
 
 ### 文件處理
 `docx` `pdf` `pptx` `xlsx`
@@ -29,7 +29,7 @@
 `presentation-architect` `soil-html-deck` `soil-image-deck` `soil-teaching-deck` `course-page-generator`
 
 ### 開發工具
-`mcp-builder` `webapp-testing` `skill-creator`
+`mcp-builder` `webapp-testing` `skill-creator` `github-setup`
 
 ### 多媒體與溝通
 `video-podcast-maker` `slack-gif-creator` `internal-comms`
