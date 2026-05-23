@@ -1,0 +1,14 @@
+#!/bin/bash
+# Pre-commit hook: auto-update README.md skill count
+
+README="README.md"
+SKILLS_DIR=".opencode/skills"
+
+count=$(ls -d "$SKILLS_DIR"/*/ 2>/dev/null | wc -l | tr -d ' ')
+[ "$count" -gt 0 ] || exit 0
+
+sed -i '' "s/^## 包含 [0-9]* 個 Skills/## 包含 $count 個 Skills/" "$README"
+
+if git diff --name-only | grep -q "^$README$"; then
+    git add "$README"
+fi
