@@ -6,6 +6,11 @@ compatibility: opencode
 
 # GitHub 連線設定流程
 
+## 重要觀念
+
+- **Git 本身無法在 GitHub 上開 repository**，必須先到 GitHub 網站手動建立，或使用 GitHub CLI（`gh`）
+- 每個專案對應一個 GitHub repo，一個電腦可以同時管理多個專案，各自獨立設定 remote 即可
+
 ## 前置條件
 
 - 在 https://github.com 註冊帳號
@@ -110,6 +115,54 @@ git push -u origin main
 後續推送只需：
 ```bash
 git push
+```
+
+## 查看 remote 網址
+
+不需開瀏覽器，直接在本機查：
+```bash
+git remote -v
+```
+
+或看 `.git/config` 檔案：
+```bash
+cat .git/config
+```
+
+## 不同專案推到不同 repo
+
+每個專案各自初始化即可，互不影響：
+
+```bash
+cd /path/to/專案A
+git init && git remote add origin git@github.com:<帳號>/專案A.git
+# ...
+
+cd /path/to/專案B
+git init && git remote add origin git@github.com:<帳號>/專案B.git
+# ...
+```
+
+若不小心設錯 remote，直接改：
+```bash
+git remote set-url origin git@github.com:<帳號>/正確的專案.git
+```
+
+## 使用 GitHub CLI 開 repo（不需開網頁）
+
+安裝 GitHub CLI：
+```bash
+brew install gh
+```
+
+登入：
+```bash
+gh auth login
+```
+
+建立 repo 並推送（一氣呵成）：
+```bash
+gh repo create 專案名稱 --public --push
 ```
 
 ## 常見問題
