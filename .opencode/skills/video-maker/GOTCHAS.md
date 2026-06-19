@@ -1,10 +1,10 @@
 # GOTCHAS — 踩坑筆記
 
 > 實戰中累積的坑，**開工前先讀一遍**。多數是跨 agent 通則，少數標注特定環境。
-> 來源：在 OpenCode / Claude Code / **Antigravity** / Windows 上實際跑這套流程踩到的。
+> 來源：在 OpenCode / Claude Code / **Antigravity** / Windows / **macOS (Apple Silicon)** 上實際跑這套流程踩到的。
 > 每條格式：**現象 → 原因 → 教訓**。
 
-圖例：🌍 所有 agent 通則 ｜ 🪟 Windows 專屬 ｜ 🔧 特定工具
+圖例：🌍 所有 agent 通則 ｜ 🪟 Windows 專屬 ｜ 🍎 macOS 專屬 ｜ 🔧 特定工具
 
 ---
 
@@ -149,17 +149,17 @@ ffmpeg -y -i video.webm -i master_audio.mp3 \
 
 ---
 
-### E-4 🌍 `-ss` 不匹配 `startPlay()` 延遲導致音畫不同步
+### E-4 🍎 `-ss` 不匹配 `startPlay()` 延遲導致音畫不同步
 - **現象**：錄出的影片畫面速度比聲音快，旁白和畫面切換對不上。
 - **原因**：`record.cjs` 先 `waitForTimeout(3000)` 再呼叫 `startPlay()`，但 ffmpeg mux 時用 `-ss 2.5` 裁切，導致實際播放起點偏移 0.5 秒。後續每頁累積誤差，整支片音畫脫鉤。
 - **教訓**：`-ss` 值必須「精確等於」`startPlay()` 被呼叫的時間點。如果 record.cjs 是 `waitForTimeout(3000)` 後才 `startPlay()`，就用 `-ss 3`，不要近似值。
 
-### E-5 🌍 音檔實際長度比 `page_dur` 短，頁面提早切換
+### E-5 🍎 音檔實際長度比 `page_dur` 短，頁面提早切換
 - **現象**：從第三頁開始畫面速度逐漸比聲音快，累積偏移越來越大。
 - **原因**：HTML 用 `ended` 事件驅動切頁，但音檔原始長度比 `page_dur` 短（例如 narration 9.2s 但 page_dur=11s）。音檔播完就觸發 `ended`，頁面提早 1.8 秒切換，後續每頁持續累積誤差。
 - **教訓**：**音檔必須先用 `ffmpeg -af apad -t <page_dur>` 補靜音到精確長度**，再放入 assets/narration/。不要讓 HTML 引用比 page_dur 短的原始音檔。
 
-### E-6 🌍 `timeupdate` 與 `ended` 雙重驅動切頁導致跳頁
+### E-6 🍎 `timeupdate` 與 `ended` 雙重驅動切頁導致跳頁
 - **現象**：切頁不穩定，偶爾跳過一頁。
 - **原因**：同時用了 `timeupdate` 裡的 `checkPageAdvance()`（檢查 `audio.currentTime >= page_dur`）和 `ended` 事件來切頁。當音檔正好在 `page_dur` 結束時，兩個邏輯先後觸發，`currentPage` 被遞增兩次導致跳頁。
 - **教訓**：只保留一種驅動方式。若音檔已精確補靜音到 `page_dur`，用 `ended` 事件驅動即可，移除 `timeupdate` 中的 `checkPageAdvance()`。

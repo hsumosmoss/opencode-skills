@@ -1,12 +1,27 @@
 ---
 name: video-maker
 description: 'claude-video-specs 三類影片產生器。活動紀錄 / 教學 / 社群科普，可選男/女聲、背景音樂。'
+compatibility: macOS, Windows
+verified-on: macOS (Apple Silicon), Windows
 ---
 
 # video-maker — 三類影片產生技能
 
 ## 安裝（新電腦）
 
+### macOS（Apple Silicon）
+```bash
+# 1. 複製此 skills 目錄到新電腦
+cp -r ~/.config/opencode/skills/video-maker <新電腦>/.config/opencode/skills/
+
+# 2. 安裝依賴
+brew install ffmpeg
+pip3 install edge-tts
+npm install playwright
+npx playwright install chromium
+```
+
+### Windows
 ```powershell
 # 1. 複製此 skills 目錄到新電腦
 cp -r ~/.config/opencode/skills/video-maker <新電腦>/.config/opencode/skills/
@@ -16,14 +31,14 @@ powershell -ExecutionPolicy Bypass -File ~/.config/opencode/skills/video-maker/s
 ```
 
 **手動需要裝的**（如 setup.ps1 已自動裝好則可跳過）：
-| 元件 | 檢查 | 安裝 |
-|------|------|------|
-| Python 3.8+ | `python --version` | [python.org](https://python.org) |
-| edge-tts | `pip show edge-tts` | `pip install edge-tts` |
-| Node.js 18+ | `node --version` | [nodejs.org](https://nodejs.org) |
-| ffmpeg | `ffmpeg -version` | `winget install "FFmpeg (Essentials Build)"` |
-| Playwright | `dir "$env:TEMP\cvs-render\node_modules\playwright"` | `npm install playwright` + `npx playwright install chromium`（在 `%TEMP%/cvs-render` 內執行）|
-| 源石黑體 | `dir "$env:LOCALAPPDATA\Microsoft\Windows\Fonts\GenSekiGothic2TW-H.otf"` | `Invoke-WebRequest https://github.com/ButTaiwan/genseki-font/raw/master/TW/GenSekiGothic2TW-H.otf` |
+| 元件 | 檢查 | 安裝 (macOS) | 安裝 (Windows) |
+|------|------|-------------|---------------|
+| Python 3.8+ | `python --version` | [python.org](https://python.org) | [python.org](https://python.org) |
+| edge-tts | `pip show edge-tts` | `pip3 install edge-tts` | `pip install edge-tts` |
+| Node.js 18+ | `node --version` | `brew install node` | [nodejs.org](https://nodejs.org) |
+| ffmpeg | `ffmpeg -version` | `brew install ffmpeg` | `winget install "FFmpeg (Essentials Build)"` |
+| Playwright | `npx playwright --version` | `npm install playwright` + `npx playwright install chromium` | 在 `%TEMP%/cvs-render` 內執行 |
+| 字體 | macOS 內建 PingFang TC | macOS 內建 | 源石黑體 `Invoke-WebRequest ...` |
 
 ## 觸發詞
 - 「做一支影片」
