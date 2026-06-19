@@ -17,7 +17,7 @@
 
 使用 `opencode debug skill` 可確認所有 Skills 已載入。
 
-## 包含 26 個 Skills
+## 包含 27 個 Skills
 
 ### 文件處理
 `docx` `pdf` `pptx` `xlsx`
