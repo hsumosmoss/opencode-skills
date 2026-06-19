@@ -8,39 +8,63 @@
 
 ## 快速開始
 
-### 🍎 macOS（Apple Silicon）
+### 安裝系統級工具
+<details>
+<summary><b>🍎 macOS（Apple Silicon）</b></summary>
+
 ```bash
-# 1. 先裝必要工具
-brew install ffmpeg uv node
+# Homebrew（套件管理）
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# 核心工具
+brew install ffmpeg node python@3.13 uv
 uv python install 3.13
 
-# 2. 複製 skills
-cp -r .opencode/skills/ ~/.config/opencode/skills/
+# Python 套件
+pip3 install edge-tts openpyxl pandas python-pptx pillow pyyaml \
+             pypdf pdfplumber reportlab defusedxml \
+             playwright anthropic mcp
+pip3 install "markitdown[pptx]"
 
-# 3. 安裝各 skill 依賴（依需求執行）
-pip3 install edge-tts           # video-maker 旁白
-npm install -g playwright       # video-maker 錄影
+# Node.js 套件
+npm install -g playwright pptxgenjs sharp puppeteer
+npm install -g react react-dom react-icons
 npx playwright install chromium
 ```
+</details>
 
-### 🪟 Windows
+<details>
+<summary><b>🪟 Windows</b></summary>
+
 ```powershell
-# 1. 先裝必要工具
+# 核心工具
 winget install "FFmpeg (Essentials Build)"
 winget install Python.Python.3.13
 winget install OpenJS.NodeJS.LTS
 
-# 2. 複製 skills
-cp -r .opencode/skills/ ~/.config/opencode/skills/
+# Python 套件
+pip install edge-tts openpyxl pandas python-pptx pillow pyyaml `
+           pypdf pdfplumber reportlab defusedxml `
+           playwright anthropic mcp
+pip install "markitdown[pptx]"
 
-# 3. 安裝依賴
-pip install edge-tts
-npm install -g playwright
+# Node.js 套件
+npm install -g playwright pptxgenjs sharp puppeteer
+npm install -g react react-dom react-icons
 npx playwright install chromium
+
+# 選擇性（字體）
+Invoke-WebRequest https://github.com/ButTaiwan/genseki-font/raw/master/TW/GenSekiGothic2TW-H.otf
+```
+</details>
+
+### 部署 Skills
+```bash
+cp -r .opencode/skills/ ~/.config/opencode/skills/
 ```
 
-### 通用設定
-在 `opencode.jsonc` 中設定權限：
+### 設定 OpenCode
+在 `opencode.jsonc` 中加入：
 ```jsonc
 {
   "permission": {
@@ -49,48 +73,96 @@ npx playwright install chromium
 }
 ```
 
-重啟 OpenCode 後用 `opencode debug skill` 確認所有 Skills 已載入。
+重啟後執行 `opencode debug skill` 確認載入。
 
 ---
 
-## 包含 27 個 Skills
+## 所有 27 個 Skills 與依賴總表
 
-### 🎬 影片製作（本環境重點）
-| Skill | 平台 | 用途 | 依賴 |
-|-------|------|------|------|
-| `video-maker` | 🍎🪟 | 活動紀錄 / 教學 / 社群科普影片 | edge-tts, ffmpeg, Playwright, Node.js |
-| `video-podcast-maker` | 🍎🪟 | 自動化 4K 影片播客 | edge-tts, ffmpeg, Node.js, Remotion |
+### 🎬 影片製作
+
+| Skill | 平台 | 用途 | 必要依賴 |
+|-------|------|------|---------|
+| `video-maker` | 🍎🪟 | 活動紀錄 / 教學 / 社群科普影片 | ffmpeg, edge-tts, Playwright, Node.js |
+| `video-podcast-maker` | 🍎🐧 | 自動化 4K 影片播客（Remotion） | ffmpeg, edge-tts, Node.js, yarn, Remotion |
 
 ### 📄 文件處理
-`docx` `pdf` `pptx` `xlsx`
+
+| Skill | 平台 | 用途 | 必要依賴 |
+|-------|------|------|---------|
+| `docx` | 🍎🪟🐧 | Word 文件建立/編輯/分析 | pandoc, LibreOffice, poppler, npm docx, defusedxml |
+| `pdf` | 🍎🪟🐧 | PDF 處理（讀/寫/合併/OCR） | pypdf, pdfplumber, reportlab, poppler, qpdf, pytesseract |
+| `pptx` | 🍎🪟🐧 | PowerPoint 簡報建立/編輯 | pptxgenjs, playwright, sharp, markitdown, LibreOffice |
+| `xlsx` | 🍎🪟🐧 | Excel 試算表處理 | openpyxl, pandas, LibreOffice（公式重算）|
 
 ### 🎨 設計與前端
-`canvas-design` `algorithmic-art` `frontend-design` `web-design-engineer` `brand-guidelines` `theme-factory` `huashu-design` `web-artifacts-builder`
+
+| Skill | 平台 | 用途 | 必要依賴 |
+|-------|------|------|---------|
+| `canvas-design` | 🍎🪟 | PNG/PDF 設計圖產出 | 無（系統字體） |
+| `algorithmic-art` | 🍎🪟 | p5.js 生成式藝術 | 無（CDN p5.js） |
+| `frontend-design` | 🍎🪟 | Web 前端設計指南 | 無（CDN 資源） |
+| `web-design-engineer` | 🍎🪟 | HTML/CSS/JS/React 頁面 | 無（CDN 資源） |
+| `brand-guidelines` | 🍎🪟 | 品牌色/字型規範 | 無（純文件）|
+| `theme-factory` | 🍎🪟 | 主題配色套用 | 無（純參考）|
+| `huashu-design` | 🍎🪟 | HTML 高保真原型/動畫 | Playwright, ffmpeg, yt-dlp, sharp |
+| `web-artifacts-builder` | 🍎🪟 | React+Tailwind 複雜 artifact | Node.js, npm |
 
 ### 📊 簡報與教學
-`presentation-architect` `soil-html-deck` `soil-image-deck` `soil-teaching-deck` `course-page-generator`
+
+| Skill | 平台 | 用途 | 必要依賴 |
+|-------|------|------|---------|
+| `presentation-architect` | 🍎🪟 | 簡報架構企劃（雙模式） | Python 3 |
+| `soil-html-deck` | 🍎🪟 | HTML 互動簡報 | Python 3 |
+| `soil-image-deck` | 🍎🪟 | 全圖片 PPTX 簡報 | python-pptx, Pillow, PyYAML |
+| `soil-teaching-deck` | 🍎🪟 | SOIL 教學 PPTX | python-pptx |
+| `course-page-generator` | 🍎🪟 | 課程頁面 + OG 縮圖 | Node.js, Puppeteer |
 
 ### 🔧 開發工具
-`mcp-builder` `webapp-testing` `skill-creator` `github-setup`
+
+| Skill | 平台 | 用途 | 必要依賴 |
+|-------|------|------|---------|
+| `mcp-builder` | 🍎🪟 | MCP Server 建構指南 | Python (anthropic, mcp) 或 TypeScript |
+| `webapp-testing` | 🍎🪟 | Playwright 本機 Web 測試 | Playwright (pip) |
+| `skill-creator` | 🍎🪟 | 建立自訂 Skill | Python 3 |
+| `github-setup` | 🍎🪟 | Git/GitHub 連線設定 | git, gh CLI（選擇性）|
 
 ### 💬 多媒體與溝通
-`slack-gif-creator` `internal-comms`
+
+| Skill | 平台 | 用途 | 必要依賴 |
+|-------|------|------|---------|
+| `slack-gif-creator` | 🍎🪟 | Slack 最佳化 GIF 動圖 | pillow, imageio, numpy |
+| `internal-comms` | 🍎🪟 | 內部通訊文件模板 | 無（純模板）|
 
 ### 📝 其他
-`doc-coauthoring` `my-skill`
+
+| Skill | 平台 | 用途 | 必要依賴 |
+|-------|------|------|---------|
+| `doc-coauthoring` | 🍎🪟 | 結構化文件協作流程 | 無（純流程）|
+| `my-skill` | 🍎🪟 | Skill 開發範本 | 無（範本）|
+
+---
+
+## 平台圖例
+
+| 圖示 | 平台 | 安裝命令 |
+|------|------|---------|
+| 🍎 | macOS (Apple Silicon) | `brew install <套件>` |
+| 🪟 | Windows | `winget install <套件>` |
+| 🐧 | Linux | `apt-get install <套件>` |
 
 ---
 
 ## 影片製作速查（video-maker）
 
 ```bash
-# 1. 產生旁白
+# 1. 產生旁白（edge-tts 男聲）
 python3 scripts/generate_narration.py
 
 # 2. 啟動本地伺服器（錄影用）
 python3 -m http.server 8080
 
-# 3. 錄影
+# 3. Playwright 錄影
 node record.cjs
 
 # 4. Mux 合成
@@ -101,6 +173,30 @@ ffmpeg -y -ss 3 -i renders/*.webm -i master_audio.mp3 \
 ```
 
 > ⚠️ 踩坑紀錄見 [video-maker/GOTCHAS.md](.opencode/skills/video-maker/GOTCHAS.md)
+
+---
+
+## 一鍵安裝腳本
+
+### 🍎 macOS
+```bash
+# 安裝所有可能需要的套件（約 5 分鐘）
+brew install ffmpeg node python@3.13 uv
+pip3 install edge-tts openpyxl pandas python-pptx pillow pyyaml \
+             pypdf pdfplumber reportlab defusedxml playwright
+npm install -g playwright pptxgenjs sharp puppeteer
+npx playwright install chromium
+```
+
+### 🪟 Windows
+```powershell
+# 安裝所有可能需要的套件
+winget install "FFmpeg (Essentials Build)" Python.Python.3.13 OpenJS.NodeJS.LTS
+pip install edge-tts openpyxl pandas python-pptx pillow pyyaml `
+           pypdf pdfplumber reportlab defusedxml playwright
+npm install -g playwright pptxgenjs sharp puppeteer
+npx playwright install chromium
+```
 
 ---
 
@@ -134,12 +230,10 @@ compatibility: opencode
 
 ## 環境紀錄
 
-本 Repo 已在以下環境實測：
-
-| 環境 | 晶片 | 測試日期 | 備註 |
-|------|------|---------|------|
-| macOS Sequoia | Apple Silicon (M4) | 2026-06-19 | video-maker 完整流程驗證 |
-| Windows | x86_64 | 2025 (原始) | video-maker 原始開發環境 |
+| 環境 | 晶片 | 測試日期 | 測試項目 |
+|------|------|---------|---------|
+| macOS Sequoia 15.5 | Apple Silicon M4 | 2026-06-19 | video-maker 完整流程（edge-tts 旁白 + Playwright 錄影 + ffmpeg 合成）|
+| Windows | x86_64 | 2025 | video-maker 原始開發環境 |
 
 ---
 
