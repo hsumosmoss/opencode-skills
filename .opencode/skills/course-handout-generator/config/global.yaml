@@ -1,0 +1,26 @@
+# ===========================================
+# Course Handout Generator — Global Config
+# ===========================================
+
+page:
+  lang: zh-TW
+  font_display: "Noto Serif TC"
+  font_body: "Noto Sans TC"
+  font_mono: "JetBrains Mono"
+  color_primary: "#B85C38"
+  color_accent: "#D4A853"
+  color_bg: "#FDF8F4"
+  color_text: "#2D1B14"
+
+handout:
+  edition: "第一版"
+  print_margin: "2cm"
+  page_size: "A4"
+
+instructor:
+  name: "講師名稱"
+  tagline: "講師一句話介紹"
+
+footer:
+  copyright: "© 版權所有"
+  show_socials: false

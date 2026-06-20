@@ -1,0 +1,190 @@
+<!--
+  Base HTML Template for Course Handout Generator
+  {{PLACEHOLDER}} markers are filled by build.mjs
+-->
+<!DOCTYPE html>
+<html lang="{{PAGE_LANG}}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{PAGE_TITLE}}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: {{COLOR_PRIMARY}};
+  --accent: {{COLOR_ACCENT}};
+  --bg: {{COLOR_BG}};
+  --bg-card: #FFFFFF;
+  --bg-card-alt: #F5EDE8;
+  --text: {{COLOR_TEXT}};
+  --text-dim: #7A5A4A;
+  --border: #E8D5C8;
+  --font-display: "Noto Serif TC", serif;
+  --font-body: "Noto Sans TC", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+@media print {
+  @page { size: {{PRINT_PAGE_SIZE}}; margin: {{PRINT_MARGIN}}; }
+  .no-print { display: none !important; }
+  body { font-size: 11pt; color: #000; background: #fff; }
+  .card, .tip-box, .warning-box, table { break-inside: avoid; }
+  h2 { page-break-before: always; }
+  h2:first-of-type { page-break-before: auto; }
+  section.toc-section { page-break-after: always; }
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-card: #2D1B14; --bg-card-alt: #3A251E;
+    --text: #F5EDE8; --text-dim: #B8A090;
+    --border: #4A3228;
+  }
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-height:1.8;padding-bottom:40px}
+.container{max-width:900px;margin:0 auto;padding:0 24px}
+
+/* Cover */
+.cover{background:linear-gradient(135deg,{{COLOR_TEXT}},var(--primary),var(--accent));color:#fff;padding:100px 0 80px;text-align:center;position:relative;overflow:hidden}
+.cover::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 40px,rgba(255,255,255,0.03) 40px,rgba(255,255,255,0.03) 80px)}
+.cover .container{position:relative;z-index:1}
+.cover .tag{display:inline-block;border:1px solid rgba(255,255,255,0.4);padding:4px 16px;border-radius:20px;font-size:0.85rem;letter-spacing:2px;margin-bottom:20px}
+.cover h1{font-family:var(--font-display);font-size:3rem;font-weight:900;margin-bottom:12px}
+.cover .subtitle{font-size:1.1rem;opacity:0.85;margin-bottom:8px}
+.cover .meta{font-size:0.9rem;opacity:0.7}
+.cover .ornament{font-size:2rem;margin-top:24px;opacity:0.5}
+
+/* TOC */
+.toc-section{background:var(--bg-card);border-bottom:1px solid var(--border);padding:40px 0}
+.toc-section h2{font-family:var(--font-display);font-size:1.3rem;margin-bottom:16px;border-left:none;padding-left:0;color:var(--text)}
+.toc-list{list-style:none;counter-reset:toc}
+.toc-list li{counter-increment:toc;padding:6px 0;border-bottom:1px dashed var(--border)}
+.toc-list li::before{content:counter(toc) ". ";font-weight:700;color:var(--primary)}
+.toc-sublist{list-style:none;padding-left:28px;margin-top:4px}
+.toc-sublist li{counter-increment:toc-sub;padding:3px 0;border-bottom:none;font-size:0.9rem;color:var(--text-dim)}
+
+/* Sections */
+section.handout-section{padding:48px 0;border-bottom:1px solid var(--border)}
+section.handout-section:last-child{border-bottom:none}
+
+/* Section heading */
+h2.section-title{font-family:var(--font-display);font-size:1.6rem;font-weight:900;margin-bottom:24px;color:var(--primary);border-left:4px solid var(--accent);padding-left:16px}
+.section-label{display:block;font-family:var(--font-body);font-size:0.8rem;font-weight:500;color:var(--accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.lead{font-size:1.05rem;color:var(--text-dim);margin-bottom:20px;padding:12px 20px;background:var(--bg-card-alt);border-radius:8px;border-left:3px solid var(--accent)}
+
+/* Sub-section */
+h3.sub-title{font-size:1.15rem;font-weight:700;margin:24px 0 12px;display:flex;align-items:center;gap:8px}
+h3.sub-title .bar{display:inline-block;width:4px;height:1.15rem;background:var(--primary);border-radius:2px;flex-shrink:0}
+
+/* Paragraphs */
+p{margin-bottom:12px}
+ul,ol{margin:8px 0 16px 24px}
+li{margin-bottom:4px}
+strong{color:var(--primary)}
+code{font-family:var(--font-mono);background:var(--bg-card-alt);padding:2px 6px;border-radius:4px;font-size:0.9em}
+pre{background:var(--bg-card-alt);border:1px solid var(--border);border-radius:8px;padding:16px;overflow-x:auto;margin:12px 0;font-family:var(--font-mono);font-size:0.9rem}
+
+/* Tables */
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:0.95rem}
+th,td{border:1px solid var(--border);padding:10px 14px;text-align:left}
+th{background:var(--primary);color:#fff;font-weight:700}
+tr:nth-child(even){background:var(--bg-card-alt)}
+
+/* Cards */
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin:16px 0}
+.card h3.card-title{font-size:1rem;margin-bottom:8px;color:var(--primary);display:flex;align-items:center;gap:8px}
+.card h3.card-title .icon{font-size:1.2rem}
+
+/* Tip / Warning */
+.tip-box{background:#FFF8E1;border-left:4px solid var(--accent);border-radius:0 8px 8px 0;padding:16px 20px;margin:16px 0}
+.tip-box .label{font-weight:700;color:var(--accent)}
+.warning-box{background:#FFEBEE;border-left:4px solid #E53935;border-radius:0 8px 8px 0;padding:16px 20px;margin:16px 0}
+.warning-box .label{font-weight:700;color:#E53935}
+@media (prefers-color-scheme: dark) {
+  .tip-box{background:#3A2E1A}
+  .warning-box{background:#3A1A1A}
+}
+
+/* Steps */
+.step{display:flex;gap:14px;margin:12px 0;align-items:start}
+.step-num{width:30px;height:30px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;flex-shrink:0;margin-top:3px}
+.step-content{flex:1}
+.step-content h4{margin:0 0 2px;font-size:0.95rem}
+.step-content p{margin:0;font-size:0.9rem;color:var(--text-dim)}
+
+/* Flow */
+.flow-row{display:flex;flex-wrap:wrap;gap:8px 4px;align-items:center;margin:12px 0}
+.flow-step{background:var(--primary);color:#fff;padding:6px 14px;border-radius:6px;font-size:0.85rem;font-weight:500}
+.flow-arrow{color:var(--accent);font-size:1.1rem}
+
+/* Tags */
+.tag{display:inline-block;padding:2px 10px;border-radius:12px;font-size:0.8rem;font-weight:500}
+.tag.green{background:#C8E6C9;color:#2E7D32}
+.tag.orange{background:#FFE0B2;color:#E65100}
+.tag.purple{background:#E1BEE7;color:#6A1B9A}
+.tag.blue{background:#BBDEFB;color:#1565C0}
+
+/* Checklist */
+.checklist{list-style:none;margin:8px 0 16px 0}
+.checklist li{padding:4px 0;display:flex;align-items:center;gap:8px}
+.checklist li::before{content:"✅";font-size:0.9rem}
+
+/* Summary grid */
+.summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:16px 0}
+.summary-item{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center}
+.summary-item .num{font-size:1.5rem;font-weight:900;color:var(--primary)}
+.summary-item .desc{font-size:0.85rem;color:var(--text-dim);margin-top:4px}
+
+/* Glossary */
+.glossary-term{font-weight:700;color:var(--primary);margin-top:12px}
+.glossary-def{margin-bottom:8px;padding-left:16px;border-left:2px solid var(--border)}
+
+/* Footer */
+footer{text-align:center;padding:40px 0 0;color:var(--text-dim);font-size:0.85rem}
+
+/* Reveal animation */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+@media (max-width:640px){
+  .cover h1{font-size:2rem}
+  .cover{padding:60px 0}
+  section.handout-section{padding:32px 0}
+  .summary-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="container">
+    <div class="tag">{{COVER_TAG}}</div>
+    <h1>{{COVER_TITLE}}</h1>
+    {{COVER_SUBTITLE}}
+    <p class="meta">{{COVER_META}}</p>
+    <div class="ornament">◈ ◈ ◈</div>
+  </div>
+</div>
+
+{{TOC_SECTION}}
+
+{{CONTENT}}
+
+<footer>
+  <div class="container">
+    <p>{{FOOTER_TITLE}} · 講義</p>
+    <p>{{FOOTER_COPYRIGHT}}</p>
+  </div>
+</footer>
+
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+  const observer=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add("visible")}})
+  },{threshold:0.1});
+  document.querySelectorAll(".reveal").forEach(el=>observer.observe(el));
+});
+</script>
+</body>
+</html>

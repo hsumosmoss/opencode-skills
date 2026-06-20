@@ -1,0 +1,20 @@
+# ===========================================
+# 蘭州拉麵職人之路 — 課程 config
+# ===========================================
+
+page:
+  title: "蘭州拉麵職人之路"
+  subtitle: "從和麵到拉麵，傳承百年手藝"
+  tag: "COURSE HANDOUT"
+  color_primary: "#B85C38"
+  color_accent: "#D4A853"
+
+instructor:
+  name: "馬建國"
+  tagline: "蘭州拉麵第三代傳人 · 三十餘年經驗"
+
+handout:
+  edition: "第一版"
+
+footer:
+  copyright: "© 2026 馬建國 · 版權所有"

@@ -1,0 +1,5 @@
+name: generate-handout
+description: Build handout from content.md + config.yaml
+steps:
+  - run: node .opencode/skills/course-handout-generator/scripts/build.mjs {{course_dir}}
+  - run: echo "✓ Handout generated in {{course_dir}}/dist/index.html"

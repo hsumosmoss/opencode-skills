@@ -1,0 +1,253 @@
+<!--
+  Base HTML Template for Course Handout Generator
+  {{PLACEHOLDER}} markers are filled by build.mjs
+-->
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>蘭州拉麵職人之路</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #B85C38;
+  --accent: #D4A853;
+  --bg: #FDF8F4;
+  --bg-card: #FFFFFF;
+  --bg-card-alt: #F5EDE8;
+  --text: #2D1B14;
+  --text-dim: #7A5A4A;
+  --border: #E8D5C8;
+  --font-display: "Noto Serif TC", serif;
+  --font-body: "Noto Sans TC", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+@media print {
+  @page { size: A4; margin: 2cm; }
+  .no-print { display: none !important; }
+  body { font-size: 11pt; color: #000; background: #fff; }
+  .card, .tip-box, .warning-box, table { break-inside: avoid; }
+  h2 { page-break-before: always; }
+  h2:first-of-type { page-break-before: auto; }
+  section.toc-section { page-break-after: always; }
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-card: #2D1B14; --bg-card-alt: #3A251E;
+    --text: #F5EDE8; --text-dim: #B8A090;
+    --border: #4A3228;
+  }
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-height:1.8;padding-bottom:40px}
+.container{max-width:900px;margin:0 auto;padding:0 24px}
+
+/* Cover */
+.cover{background:linear-gradient(135deg,#2D1B14,var(--primary),var(--accent));color:#fff;padding:100px 0 80px;text-align:center;position:relative;overflow:hidden}
+.cover::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 40px,rgba(255,255,255,0.03) 40px,rgba(255,255,255,0.03) 80px)}
+.cover .container{position:relative;z-index:1}
+.cover .tag{display:inline-block;border:1px solid rgba(255,255,255,0.4);padding:4px 16px;border-radius:20px;font-size:0.85rem;letter-spacing:2px;margin-bottom:20px}
+.cover h1{font-family:var(--font-display);font-size:3rem;font-weight:900;margin-bottom:12px}
+.cover .subtitle{font-size:1.1rem;opacity:0.85;margin-bottom:8px}
+.cover .meta{font-size:0.9rem;opacity:0.7}
+.cover .ornament{font-size:2rem;margin-top:24px;opacity:0.5}
+
+/* TOC */
+.toc-section{background:var(--bg-card);border-bottom:1px solid var(--border);padding:40px 0}
+.toc-section h2{font-family:var(--font-display);font-size:1.3rem;margin-bottom:16px;border-left:none;padding-left:0;color:var(--text)}
+.toc-list{list-style:none;counter-reset:toc}
+.toc-list li{counter-increment:toc;padding:6px 0;border-bottom:1px dashed var(--border)}
+.toc-list li::before{content:counter(toc) ". ";font-weight:700;color:var(--primary)}
+.toc-sublist{list-style:none;padding-left:28px;margin-top:4px}
+.toc-sublist li{counter-increment:toc-sub;padding:3px 0;border-bottom:none;font-size:0.9rem;color:var(--text-dim)}
+
+/* Sections */
+section.handout-section{padding:48px 0;border-bottom:1px solid var(--border)}
+section.handout-section:last-child{border-bottom:none}
+
+/* Section heading */
+h2.section-title{font-family:var(--font-display);font-size:1.6rem;font-weight:900;margin-bottom:24px;color:var(--primary);border-left:4px solid var(--accent);padding-left:16px}
+.section-label{display:block;font-family:var(--font-body);font-size:0.8rem;font-weight:500;color:var(--accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.lead{font-size:1.05rem;color:var(--text-dim);margin-bottom:20px;padding:12px 20px;background:var(--bg-card-alt);border-radius:8px;border-left:3px solid var(--accent)}
+
+/* Sub-section */
+h3.sub-title{font-size:1.15rem;font-weight:700;margin:24px 0 12px;display:flex;align-items:center;gap:8px}
+h3.sub-title .bar{display:inline-block;width:4px;height:1.15rem;background:var(--primary);border-radius:2px;flex-shrink:0}
+
+/* Paragraphs */
+p{margin-bottom:12px}
+ul,ol{margin:8px 0 16px 24px}
+li{margin-bottom:4px}
+strong{color:var(--primary)}
+code{font-family:var(--font-mono);background:var(--bg-card-alt);padding:2px 6px;border-radius:4px;font-size:0.9em}
+pre{background:var(--bg-card-alt);border:1px solid var(--border);border-radius:8px;padding:16px;overflow-x:auto;margin:12px 0;font-family:var(--font-mono);font-size:0.9rem}
+
+/* Tables */
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:0.95rem}
+th,td{border:1px solid var(--border);padding:10px 14px;text-align:left}
+th{background:var(--primary);color:#fff;font-weight:700}
+tr:nth-child(even){background:var(--bg-card-alt)}
+
+/* Cards */
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin:16px 0}
+.card h3.card-title{font-size:1rem;margin-bottom:8px;color:var(--primary);display:flex;align-items:center;gap:8px}
+.card h3.card-title .icon{font-size:1.2rem}
+
+/* Tip / Warning */
+.tip-box{background:#FFF8E1;border-left:4px solid var(--accent);border-radius:0 8px 8px 0;padding:16px 20px;margin:16px 0}
+.tip-box .label{font-weight:700;color:var(--accent)}
+.warning-box{background:#FFEBEE;border-left:4px solid #E53935;border-radius:0 8px 8px 0;padding:16px 20px;margin:16px 0}
+.warning-box .label{font-weight:700;color:#E53935}
+@media (prefers-color-scheme: dark) {
+  .tip-box{background:#3A2E1A}
+  .warning-box{background:#3A1A1A}
+}
+
+/* Steps */
+.step{display:flex;gap:14px;margin:12px 0;align-items:start}
+.step-num{width:30px;height:30px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;flex-shrink:0;margin-top:3px}
+.step-content{flex:1}
+.step-content h4{margin:0 0 2px;font-size:0.95rem}
+.step-content p{margin:0;font-size:0.9rem;color:var(--text-dim)}
+
+/* Flow */
+.flow-row{display:flex;flex-wrap:wrap;gap:8px 4px;align-items:center;margin:12px 0}
+.flow-step{background:var(--primary);color:#fff;padding:6px 14px;border-radius:6px;font-size:0.85rem;font-weight:500}
+.flow-arrow{color:var(--accent);font-size:1.1rem}
+
+/* Tags */
+.tag{display:inline-block;padding:2px 10px;border-radius:12px;font-size:0.8rem;font-weight:500}
+.tag.green{background:#C8E6C9;color:#2E7D32}
+.tag.orange{background:#FFE0B2;color:#E65100}
+.tag.purple{background:#E1BEE7;color:#6A1B9A}
+.tag.blue{background:#BBDEFB;color:#1565C0}
+
+/* Checklist */
+.checklist{list-style:none;margin:8px 0 16px 0}
+.checklist li{padding:4px 0;display:flex;align-items:center;gap:8px}
+.checklist li::before{content:"✅";font-size:0.9rem}
+
+/* Summary grid */
+.summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:16px 0}
+.summary-item{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center}
+.summary-item .num{font-size:1.5rem;font-weight:900;color:var(--primary)}
+.summary-item .desc{font-size:0.85rem;color:var(--text-dim);margin-top:4px}
+
+/* Glossary */
+.glossary-term{font-weight:700;color:var(--primary);margin-top:12px}
+.glossary-def{margin-bottom:8px;padding-left:16px;border-left:2px solid var(--border)}
+
+/* Footer */
+footer{text-align:center;padding:40px 0 0;color:var(--text-dim);font-size:0.85rem}
+
+/* Reveal animation */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+@media (max-width:640px){
+  .cover h1{font-size:2rem}
+  .cover{padding:60px 0}
+  section.handout-section{padding:32px 0}
+  .summary-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="container">
+    <div class="tag">COURSE HANDOUT</div>
+    <h1>蘭州拉麵職人之路</h1>
+    <p class="subtitle">從和麵到拉麵，傳承百年手藝</p>
+    <p class="meta">👤 馬建國 ｜ 第一版</p>
+    <div class="ornament">◈ ◈ ◈</div>
+  </div>
+</div>
+
+<section class="toc-section"><div class="container"><h2>目錄</h2><ol class="toc-list"><li><a href="#基礎原理">基礎原理</a><ol class="toc-sublist"><li><a href="#sub-麵粉選擇">麵粉選擇</a></li><li><a href="#sub-蓬灰拉麵劑">蓬灰（拉麵劑）</a></li><li><a href="#sub-水溫與水量">水溫與水量</a></li><li><a href="#sub-三揉三醒流程">三揉三醒流程</a></li></ol></li><li><a href="#技法圖解">技法圖解</a><ol class="toc-sublist"><li><a href="#sub-粗細對照表">粗細對照表</a></li><li><a href="#sub-基本拉麵手法">基本拉麵手法</a></li></ol></li><li><a href="#完整配方">完整配方</a><ol class="toc-sublist"><li><a href="#sub-牛骨清湯配方">牛骨清湯配方</a></li><li><a href="#sub-蘭州辣油煉製">蘭州辣油煉製</a></li><li><a href="#sub-五黃標準配碗">五黃標準配碗</a></li></ol></li><li><a href="#常見失誤對照表">常見失誤對照表</a></li><li><a href="#術語表">術語表</a></li></ol></div></section>
+
+<section class="handout-section" id="基礎原理"><div class="reveal">
+<span class="section-label">麵團的科學</span>
+<h2 class="section-title">基礎原理</h2>
+<p class="lead">理解麵粉、水、蓬灰與鹽之間的化學反應，是做好拉麵的第一步。</p>
+<h3 class="sub-title" id="sub-麵粉選擇"><span class="bar"></span>麵粉選擇</h3>
+<table><tr><th>類型</th><th>蛋白質含量</th><th>效果</th><th>評價</th></tr><tr><td>高筋麵粉</td><td>12-14%</td><td>麵筋強、彈性足</td><td>拉麵首選</td></tr><tr><td>中筋麵粉</td><td>10-12%</td><td>適中、好操作</td><td>初學者適用</td></tr><tr><td>低筋麵粉</td><td>7-9%</td><td>易斷裂</td><td>不適合</td></tr></table>
+<h3 class="sub-title" id="sub-蓬灰拉麵劑"><span class="bar"></span>蓬灰（拉麵劑）</h3>
+<p>蓬灰是蘭州拉麵的靈魂。傳統以蓬草燒製，主要成分為碳酸鈉與碳酸鉀。</p>
+<div class="tip-box"><span class="label">💡 Tip</span> 每 500g 麵粉加入 2-3g 蓬灰，溶解於 250ml 溫水中。</div>
+<h3 class="sub-title" id="sub-水溫與水量"><span class="bar"></span>水溫與水量</h3>
+<table><tr><th>季節</th><th>水溫</th><th>水量（每500g粉）</th></tr><tr><td>夏季</td><td>涼水 20°C</td><td>230-250ml</td></tr><tr><td>冬季</td><td>溫水 35-40°C</td><td>250-270ml</td></tr><tr><td>春秋</td><td>常溫 25°C</td><td>240-260ml</td></tr></table>
+<h3 class="sub-title" id="sub-三揉三醒流程"><span class="bar"></span>三揉三醒流程</h3>
+<div class="step"><div class="step-num">1</div><div class="step-content"><h4>初次和麵（8-10分鐘）</h4><p>將麵粉圍成圓圈，倒入蓬灰鹽水，由內向外推揉至成團。</p></div></div>
+<div class="step"><div class="step-num">2</div><div class="step-content"><h4>第一次醒麵（15分鐘）</h4><p>蓋上濕布，讓水分均勻滲透，麵筋自然放鬆。</p></div></div>
+<div class="step"><div class="step-num">3</div><div class="step-content"><h4>第二次揉麵（5分鐘）</h4><p>用拳頭搗開麵團，摺疊後再揉至略微光滑。</p></div></div>
+<div class="step"><div class="step-num">4</div><div class="step-content"><h4>第二次醒麵（20分鐘）</h4><p>麵筋網絡開始形成。</p></div></div>
+<div class="step"><div class="step-num">5</div><div class="step-content"><h4>第三次揉麵（3分鐘）</h4><p>揉至表面光滑如嬰兒肌膚，切開斷面無氣孔。</p></div></div>
+<div class="step"><div class="step-num">6</div><div class="step-content"><h4>第三次醒麵（30分鐘）</h4><p>麵筋充分舒展，準備溜麵。</p></div></div>
+<div class="card"><h3 class="card-title"><span class="icon">✅</span>完成判斷標準</h3>
+<ul><li>麵團表面光滑無裂紋</li><li>手指按壓有彈性、不回縮過快</li><li>斷面細密無明顯氣孔</li>
+</ul>
+</div>
+<div class="summary-grid"><div class="summary-item"><div class="num">6</div><div class="desc">步驟總數</div></div><div class="summary-item"><div class="num">45+</div><div class="desc">總耗時（分鐘）</div></div><div class="summary-item"><div class="num">3</div><div class="desc">揉麵次數</div></div><div class="summary-item"><div class="num">3</div><div class="desc">醒麵次數</div></div></div>
+<section class="handout-section" id="技法圖解"><div class="reveal">
+<span class="section-label">拉麵七式</span>
+<h2 class="section-title">技法圖解</h2>
+<p class="lead">蘭州拉麵依粗細分為七種，各有不同的拉法與口感。</p>
+<h3 class="sub-title" id="sub-粗細對照表"><span class="bar"></span>粗細對照表</h3>
+<table><tr><th>名稱</th><th>直徑</th><th>對摺次數</th><th>口感</th><th>適合湯頭</th></tr><tr><td>二細</td><td>3mm</td><td>3 次 → 8 條</td><td>紮實有嚼勁</td><td>清湯</td></tr><tr><td>三細</td><td>2mm</td><td>4 次 → 16 條</td><td>適中</td><td>紅燒、清湯</td></tr><tr><td>細麵</td><td>1.5mm</td><td>5 次 → 32 條</td><td>細滑軟Q</td><td>紅燒</td></tr><tr><td>毛細</td><td>0.8mm</td><td>6 次 → 64 條</td><td>入口即化</td><td>濃湯</td></tr><tr><td>韭葉</td><td>扁平 5mm</td><td>壓扁後拉</td><td>寬薄爽滑</td><td>乾拌</td></tr><tr><td>寬麵</td><td>扁平 15mm</td><td>壓寬後拉</td><td>寬厚帶勁</td><td>紅燒、乾拌</td></tr><tr><td>大寬</td><td>扁平 30mm</td><td>壓極寬後拉</td><td>皮帶般口感</td><td>乾拌</td></tr></table>
+<h3 class="sub-title" id="sub-基本拉麵手法"><span class="bar"></span>基本拉麵手法</h3>
+<div class="step"><div class="step-num">7</div><div class="step-content"><h4>雙手各持溜好的麵條兩端，掌心向上</h4></div></div>
+<div class="step"><div class="step-num">8</div><div class="step-content"><h4>將麵條提起，手腕向外翻轉，同時輕輕抖動</h4></div></div>
+<div class="step"><div class="step-num">9</div><div class="step-content"><h4>麵條自然下垂拉長後，雙手交叉使麵條扭轉</h4></div></div>
+<div class="step"><div class="step-num">10</div><div class="step-content"><h4>對摺，重複上述步驟</h4></div></div>
+<div class="step"><div class="step-num">11</div><div class="step-content"><h4>每對摺一次，麵條數量翻倍</h4></div></div>
+<div class="warning-box"><span class="label">⚠ ️ Warning</span> 初學者從二細開始練習。粗麵條不容易斷，成功率高。</div>
+<div class="flow-row"><span class="flow-step">二細</span><span class="flow-arrow">→</span><span class="flow-step">三細</span><span class="flow-arrow">→</span><span class="flow-step">細麵</span><span class="flow-arrow">→</span><span class="flow-step">毛細</span><span class="flow-arrow">→</span><span class="flow-step">韭葉</span><span class="flow-arrow">→</span><span class="flow-step">寬麵</span><span class="flow-arrow">→</span><span class="flow-step">大寬</span></div>
+<section class="handout-section" id="完整配方"><div class="reveal">
+<span class="section-label">湯頭與澆頭</span>
+<h2 class="section-title">完整配方</h2>
+<p class="lead">一碗蘭州拉麵的靈魂，在於湯頭與辣油的完美搭配。</p>
+<h3 class="sub-title" id="sub-牛骨清湯配方"><span class="bar"></span>牛骨清湯配方</h3>
+<table><tr><th>材料</th><th>份量</th></tr><tr><td>牛大骨</td><td>2kg</td></tr><tr><td>牛腱肉</td><td>500g</td></tr><tr><td>生薑</td><td>50g（拍扁）</td></tr><tr><td>花椒</td><td>5g</td></tr><tr><td>草果</td><td>2 顆</td></tr><tr><td>清水</td><td>5L</td></tr></table>
+<div class="step"><div class="step-num">12</div><div class="step-content"><h4>浸泡</h4><p>牛骨浸泡 2 小時去血水</p></div></div>
+<div class="step"><div class="step-num">13</div><div class="step-content"><h4>汆燙</h4><p>冷水下鍋，煮沸 5 分鐘，撈出洗淨</p></div></div>
+<div class="step"><div class="step-num">14</div><div class="step-content"><h4>熬湯</h4><p>重新加水 5L，大火煮沸後轉小火，維持微滾 4-6 小時</p></div></div>
+<div class="step"><div class="step-num">15</div><div class="step-content"><h4>調味</h4><p>僅加鹽調味，保留純正牛骨鮮味</p></div></div>
+<h3 class="sub-title" id="sub-蘭州辣油煉製"><span class="bar"></span>蘭州辣油煉製</h3>
+<p>辣椒粉 100g + 菜籽油 300ml + 白芝麻 30g + 八角 2 顆。</p>
+<p>油燒至 180°C 後降溫至 150°C，分三次潑入辣椒粉中，邊潑邊攪。</p>
+<p><span class="tag green">牛骨清湯</span> <span class="tag orange">辣油煉製</span> <span class="tag purple">完整出餐</span></p>
+<h3 class="sub-title" id="sub-五黃標準配碗"><span class="bar"></span>五黃標準配碗</h3>
+<div class="tip-box"><span class="label">💡 Tip</span> 一清二白三紅四綠五黃：湯清、蘿蔔白、辣油紅、蒜苗綠、麵條黃。</div>
+<section class="handout-section" id="常見失誤對照表"><div class="reveal">
+<h2 class="section-title">常見失誤對照表</h2>
+<p class="lead">快速診斷問題，精準解決。</p>
+<table><tr><th>問題</th><th>原因</th><th>解決方案</th></tr><tr><td>麵條一拉就斷</td><td>醒麵不足／蓬灰太少</td><td>延長醒麵時間，補充蓬灰</td></tr><tr><td>麵條粗細不均</td><td>溜麵不均勻</td><td>加強溜麵，使麵筋均勻排列</td></tr><tr><td>麵條煮後糊爛</td><td>煮太久／麵團太軟</td><td>縮短煮麵時間，減少水量</td></tr><tr><td>湯頭渾濁</td><td>火候太大／未去血水</td><td>汆燙確實，全程微火</td></tr><tr><td>辣油不香</td><td>油溫太高</td><td>油溫控制在 150°C 再潑</td></tr><tr><td>麵條顏色發暗</td><td>蓬灰過量</td><td>減少蓬灰用量，或延長醒麵</td></tr></table>
+<section class="handout-section" id="術語表"><div class="reveal">
+<h2 class="section-title">術語表</h2>
+<p class="glossary-term">溜麵</p><p class="glossary-def">拉麵前讓麵筋均勻排列的預備工序，雙手上下抖動並交叉扭轉麵條。</p>
+<p class="glossary-term">上勁</p><p class="glossary-def">麵條經過溜麵後，麵筋排列整齊、充滿彈性的狀態。</p>
+<p class="glossary-term">蓬灰</p><p class="glossary-def">以蓬草燒製的天然鹼灰，主要成分為碳酸鈉與碳酸鉀，能增強麵條延展性。</p>
+<p class="glossary-term">三揉三醒</p><p class="glossary-def">和麵的標準工序——揉麵與醒麵交替三次，使麵筋逐步形成完整網絡。</p>
+<p class="glossary-term">一清二白三紅四綠五黃</p><p class="glossary-def">蘭州拉麵的標準——湯清、蘿蔔白、辣油紅、蒜苗綠、麵條黃。</p>
+
+<footer>
+  <div class="container">
+    <p>蘭州拉麵職人之路 · 講義</p>
+    <p>© 2026 馬建國 · 版權所有</p>
+  </div>
+</footer>
+
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+  const observer=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add("visible")}})
+  },{threshold:0.1});
+  document.querySelectorAll(".reveal").forEach(el=>observer.observe(el));
+});
+</script>
+</body>
+</html>

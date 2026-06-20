@@ -1,0 +1,4 @@
+name: preview-handout
+description: Start dev server with hot reload for handout editing
+steps:
+  - run: node .opencode/skills/course-handout-generator/scripts/dev.mjs {{course_dir}} --port={{port}}

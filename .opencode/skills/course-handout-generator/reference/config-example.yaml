@@ -1,0 +1,22 @@
+# ===========================================
+# Course Handout Generator — Config 範例
+# 課程 config 只需寫要覆蓋的欄位（deep merge）
+# ===========================================
+
+page:
+  title: "蘭州拉麵職人之路"
+  subtitle: "從和麵到拉麵，傳承百年手藝"
+  tag: "COURSE HANDOUT"
+
+instructor:
+  name: "馬建國"
+  tagline: "蘭州拉麵第三代傳人・「馬家麵館」創辦人"
+  bio: >
+    出生於甘肅蘭州的拉麵世家，15 歲開始隨父親學藝，至今三十餘年。
+    曾獲「中國麵食文化節」金獎。
+
+handout:
+  edition: "第一版"
+
+footer:
+  copyright: "© 2026 馬建國 · 版權所有"
