@@ -2,7 +2,7 @@
 requests>=2.31.0,<3.0.0
 
 # TTS backends (install only the ones you use)
-edge-tts>=6.1.0,<7.0.0                        # TTS_BACKEND=edge (default, free)
+edge-tts>=6.1.0,<8.0.0                        # TTS_BACKEND=edge (default, free)
 azure-cognitiveservices-speech>=1.35.0,<2.0.0  # TTS_BACKEND=azure
 dashscope>=1.17.0,<2.0.0                       # TTS_BACKEND=cosyvoice
 # TTS_BACKEND=doubao     — uses requests only (no extra package)
