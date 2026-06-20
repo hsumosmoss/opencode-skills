@@ -77,7 +77,7 @@ cp -r .opencode/skills/ ~/.config/opencode/skills/
 
 ---
 
-## 所有 27 個 Skills 與依賴總表
+## 所有 28 個 Skills 與依賴總表
 
 ### 🎬 影片製作
 
@@ -117,6 +117,7 @@ cp -r .opencode/skills/ ~/.config/opencode/skills/
 | `soil-image-deck` | 🍎🪟 | 全圖片 PPTX 簡報 | python-pptx, Pillow, PyYAML |
 | `soil-teaching-deck` | 🍎🪟 | SOIL 教學 PPTX | python-pptx |
 | `course-page-generator` | 🍎🪟 | 課程頁面 + OG 縮圖 | Node.js, Puppeteer |
+| `course-handout-generator` | 🍎🪟 | 教學講義 Markdown→HTML 建置管線 | Node.js, js-yaml |
 
 ### 🔧 開發工具
 
