@@ -77,7 +77,7 @@ cp -r .opencode/skills/ ~/.config/opencode/skills/
 
 ---
 
-## 所有 28 個 Skills 與依賴總表
+## 所有 29 個 Skills 與依賴總表
 
 ### 🎬 影片製作
 
@@ -135,6 +135,12 @@ cp -r .opencode/skills/ ~/.config/opencode/skills/
 | `slack-gif-creator` | 🍎🪟 | Slack 最佳化 GIF 動圖 | pillow, imageio, numpy |
 | `internal-comms` | 🍎🪟 | 內部通訊文件模板 | 無（純模板）|
 
+### 🗣️ 語音
+
+| Skill | 平台 | 用途 | 必要依賴 |
+|-------|------|------|---------|
+| `xu-yaowen-voice` | 🪟 | 許耀文語音克隆 TTS（VoxCPM2） | NVIDIA GPU, Python 3.10–3.12, voxcpm |
+
 ### 📝 其他
 
 | Skill | 平台 | 用途 | 必要依賴 |
@@ -151,6 +157,8 @@ cp -r .opencode/skills/ ~/.config/opencode/skills/
 | 🍎 | macOS (Apple Silicon) | `brew install <套件>` |
 | 🪟 | Windows | `winget install <套件>` |
 | 🐧 | Linux | `apt-get install <套件>` |
+
+> 標示僅 🪟 的 Skill 表示**僅支援 Windows**（如 `xu-yaowen-voice` 依賴 NVIDIA CUDA + VoxCPM2）。
 
 ---
 
