@@ -16,11 +16,11 @@ platform: windows
 
 ## 前置安裝
 
-請先安裝 [VoxCPM2 Voice Cloner](https://github.com/mathruffian-dot/voxcpm2-voice-cloner)：
+請先安裝相依環境：
 
 ```powershell
-git clone https://github.com/mathruffian-dot/voxcpm2-voice-cloner.git
-cd voxcpm2-voice-cloner
+git clone https://github.com/hsumosmoss/voxcpm2-voice-env.git
+cd voxcpm2-voice-env
 .\install.bat
 ```
 
