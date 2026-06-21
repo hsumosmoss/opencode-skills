@@ -139,7 +139,7 @@ cp -r .opencode/skills/ ~/.config/opencode/skills/
 
 | Skill | 平台 | 用途 | 必要依賴 |
 |-------|------|------|---------|
-| `xu-yaowen-voice` | 🪟 | 許耀文語音克隆 TTS（VoxCPM2） | NVIDIA GPU, Python 3.10–3.12, voxcpm |
+| `xu-yaowen-voice` | 🪟🍎 | 許耀文語音克隆 TTS（VoxCPM2） | NVIDIA GPU / Apple Silicon MPS, Python 3.10–3.12, voxcpm |
 
 ### 📝 其他
 
@@ -158,7 +158,7 @@ cp -r .opencode/skills/ ~/.config/opencode/skills/
 | 🪟 | Windows | `winget install <套件>` |
 | 🐧 | Linux | `apt-get install <套件>` |
 
-> 標示僅 🪟 的 Skill 表示**僅支援 Windows**（如 `xu-yaowen-voice` 依賴 NVIDIA CUDA + VoxCPM2）。
+> 標示 🪟🍎 表示跨平台支援（Windows + macOS）。
 
 ---
 
