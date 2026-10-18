@@ -12,7 +12,7 @@ Skills 是 OpenCode 的擴充套件，提供 AI 助手專門的知識、工作�
 3. AI 判斷使用者請求符合某個 Skill 後，才會載入完整的 `SKILL.md` 內容
 4. 可再依需求讀取配套的 scripts / references / assets
 
-## 已安裝的 Skills（35 個）
+## 已安裝的 Skills（36 個）
 
 所有 Skills 存放於 `~/.config/opencode/skills/`
 
@@ -35,6 +35,8 @@ Skills 是 OpenCode 的擴充套件，提供 AI 助手專門的知識、工作�
 | `theme-factory` | 主題工廠 |
 | `html-motion-design` | 華書設計 |
 | `web-artifacts-builder` | Web 成品建置 |
+| `font-prompt-picker` | AI 生圖字體風格提示詞庫（161 種、10 大類，場景挑選→模板套用） |
+| `svg-asset-picker` | SVG 圖示庫挑選（7,399 個圖示 + 自繪 pattern，模糊搜尋→內嵌輸出） |
 
 ### 簡報與教學
 | Skill | 說明 |
@@ -59,7 +61,6 @@ Skills 是 OpenCode 的擴充套件，提供 AI 助手專門的知識、工作�
 | `short-video-teardown` | 短影音爆款拆解（競品分析→公式提煉→腳本+分鏡） |
 | `video-script-maker` | 影片腳本前製三合一（大綱/口語化審校/封標檢查） |
 | `code-animation-director` | 程式碼動畫導演（藝術風格動畫、解說動畫；收編自 huashu-art-motion v1.2.0） |
-| `font-prompt-picker` | AI 生圖字體風格提示詞庫（161 種、10 大類，場景挑選→模板套用） |
 | `chat-gif-animator` | Slack GIF 動圖製作 |
 | `soundtrack-mixer` | 配樂搜尋（Openverse）與 ffmpeg 混音 |
 | `hum-to-score` | 哼唱轉 MIDI/簡譜，雙向往返修改 |

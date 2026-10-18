@@ -77,7 +77,7 @@ cp -r .opencode/skills/ ~/.config/opencode/skills/
 
 ---
 
-## 所有 35 個 Skills 與依賴總表
+## 所有 36 個 Skills 與依賴總表
 
 ### 🎬 影片製作
 
@@ -88,7 +88,6 @@ cp -r .opencode/skills/ ~/.config/opencode/skills/
 | `short-video-teardown` | 🍎🪟 | 短影音爆款拆解（競品分析→腳本+分鏡） | uv, yt-dlp, ffmpeg；選配 GEMINI_API_KEY、faster-whisper |
 | `video-script-maker` | 🍎🪟 | 影片腳本前製（大綱→審校→封標檢查） | 無（純流程）|
 | `code-animation-director` | 🍎🪟 | 程式碼動畫導演（藝術風格/解說動畫） | uv, ffmpeg, Playwright Chromium |
-| `font-prompt-picker` | 🔤 | AI 生圖字體風格提示詞庫（161 種，挑風格→套模板→輸出提示詞） | 無（純資料庫）|
 
 [^kvf]: Windows 可用（依賴均已驗證：python3/ffmpeg/node/edge-tts），但上游僅聲明 macOS/Linux 支援——文件內 bash 片段需改寫為 pwsh 等效語法，指定字型 PingFang SC 為 macOS 專有（建議於 Windows 安裝 Noto Sans SC 取得最佳效果）。
 
@@ -113,6 +112,8 @@ cp -r .opencode/skills/ ~/.config/opencode/skills/
 | `theme-factory` | 🍎🪟 | 主題配色套用 | 無（純參考）|
 | `html-motion-design` | 🍎🪟 | HTML 高保真原型/動畫 | Playwright, ffmpeg, yt-dlp, sharp |
 | `web-artifacts-builder` | 🍎🪟 | React+Tailwind 複雜 artifact | Node.js, npm |
+| `font-prompt-picker` | 🔤 | AI 生圖字體風格提示詞庫（161 種，挑風格→套模板→輸出提示詞） | 無（純資料庫）|
+| `svg-asset-picker` | 🎨 | SVG 圖示庫挑選（7,399 個三套 MIT/ISC 庫 + 自繪 pattern，庫缺則現畫） | 無（純素材庫）|
 
 ### 📊 簡報與教學
 
