@@ -45,7 +45,7 @@ compatibility: opencode
 ### Step 5：自動組裝簡報
 - 執行腳本將 YAML、DOCX 與圖片合成實體 `.pptx`：
   ```bash
-  python3 ~/.gemini/antigravity/skills/presentation-architect/scripts/build_pptx.py <YAML路徑> <圖片目錄> <DOCX路徑>
+  python3 ~/.config/opencode/skills/presentation-architect/scripts/build_pptx.py <YAML路徑> <圖片目錄> <DOCX路徑>
   ```
 - **中文字體**：預設使用 `Microsoft JhengHei`；macOS 環境 fallback 至 `PingFang TC` 或 `Noto Sans TC`。
 - 建議在文字層疊加半透明深色底框，避免白色文字被明亮背景吃掉。
@@ -80,7 +80,7 @@ compatibility: opencode
 - 套用 Step 4 模板，根據風格與 ASCII 框架，調用 `generate_image` 工具逐頁生成圖片。
 - **排版解決方案**：若產出 1:1 圖片，請勿直接拉伸。執行 `scripts/generate_presentation.py` 透過「左圖右文」交錯版型契合 16:9：
   ```bash
-  python3 ~/.gemini/antigravity/skills/presentation-architect/scripts/generate_presentation.py
+  python3 ~/.config/opencode/skills/presentation-architect/scripts/generate_presentation.py
   ```
 - (交由使用者檢視)
 
@@ -95,16 +95,16 @@ compatibility: opencode
 
 | 使用者說... | 推薦 Skill + 模式 | 輸出 | 說明 |
 |------------|------------------|------|------|
-| 「全圖版」「文字燒入圖片」「baked」 | → `soil-image-deck` **baked** | `.pptx`（每頁一圖，不可編輯） | 社群分享、直播、海報感 |
-| 「全圖＋可編輯文字」「plate」「之後要改」 | → `soil-image-deck` **plate** | `.pptx`（底圖+文字框） | 需要事後修改文字 |
-| 「互動式」「網頁」「Chart.js」「HTML」 | → `soil-html-deck` | 單一 `.html` | 線上分享、直播、互動表格 |
-| 「教學簡報」「課堂」「可編輯」 | → `soil-teaching-deck` | `.pptx`（純文字物件） | 課堂教學、認知最佳化 |
+| 「全圖版」「文字燒入圖片」「baked」 | → `image-first-slides` **baked** | `.pptx`（每頁一圖，不可編輯） | 社群分享、直播、海報感 |
+| 「全圖＋可編輯文字」「plate」「之後要改」 | → `image-first-slides` **plate** | `.pptx`（底圖+文字框） | 需要事後修改文字 |
+| 「互動式」「網頁」「Chart.js」「HTML」 | → `interactive-html-slides` | 單一 `.html` | 線上分享、直播、互動表格 |
+| 「教學簡報」「課堂」「可編輯」 | → `teaching-slide-optimizer` | `.pptx`（純文字物件） | 課堂教學、認知最佳化 |
 | 「套用模板」「編輯現有簡報」 | → `pptx` | `.pptx` | 底層工具 |
 | 未指定格式（Mode 1/2 預設） | → 本 Skill 內建腳本 | `.pptx` | 無需額外 Skill |
 
 > **主動詢問原則**：
 > - 企劃完成後，若使用者未指定輸出格式，主動詢問：「您希望以哪種格式輸出？（全圖式 baked / 全圖式 plate 可編輯 / 互動網頁 / 教學簡報）」
-> - 若使用者選了 `soil-image-deck` 但未指定 baked/plate，詢問：「請問要文字燒入圖片（baked），還是底圖+可編輯文字（plate）？」
+> - 若使用者選了 `image-first-slides` 但未指定 baked/plate，詢問：「請問要文字燒入圖片（baked），還是底圖+可編輯文字（plate）？」
 
 ---
 

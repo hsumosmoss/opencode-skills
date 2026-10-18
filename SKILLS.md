@@ -12,7 +12,7 @@ Skills 是 OpenCode 的擴充套件，提供 AI 助手專門的知識、工作�
 3. AI 判斷使用者請求符合某個 Skill 後，才會載入完整的 `SKILL.md` 內容
 4. 可再依需求讀取配套的 scripts / references / assets
 
-## 已安裝的 Skills（26 個）
+## 已安裝的 Skills（31 個）
 
 所有 Skills 存放於 `~/.config/opencode/skills/`
 
@@ -28,21 +28,21 @@ Skills 是 OpenCode 的擴充套件，提供 AI 助手專門的知識、工作�
 | Skill | 說明 |
 |-------|------|
 | `canvas-design` | 設計哲學 → 輸出高品質 PDF/PNG 藝術品 |
-| `algorithmic-art` | p5.js 生成式藝術（含互動參數控制） |
+| `generative-art-animation` | p5.js 生成式藝術（含互動參數控制） |
 | `frontend-design` | 生產級前端介面（React/HTML/CSS） |
 | `web-design-engineer` | 高品質 Web 成品（頁面、儀表板、互動原型） |
 | `brand-guidelines` | Anthropic 品牌色與字型套用 |
 | `theme-factory` | 主題工廠 |
-| `huashu-design` | 華書設計 |
+| `html-motion-design` | 華書設計 |
 | `web-artifacts-builder` | Web 成品建置 |
 
 ### 簡報與教學
 | Skill | 說明 |
 |-------|------|
 | `presentation-architect` | 簡報架構總監（圖文錨定 + 生成式企劃，中英雙語） |
-| `soil-html-deck` | SOIL 互動 HTML 投影片 |
-| `soil-image-deck` | SOIL 圖片式投影片 |
-| `soil-teaching-deck` | SOIL 教學投影片 |
+| `interactive-html-slides` | SOIL 互動 HTML 投影片 |
+| `image-first-slides` | SOIL 圖片式投影片 |
+| `teaching-slide-optimizer` | SOIL 教學投影片 |
 | `course-page-generator` | 課程頁面產生器 |
 
 ### 開發工具
@@ -55,14 +55,16 @@ Skills 是 OpenCode 的擴充套件，提供 AI 助手專門的知識、工作�
 ### 多媒體與溝通
 | Skill | 說明 |
 |-------|------|
-| `video-podcast-maker` | 影片/Podcast 製作（含語音、腳本、素材） |
-| `slack-gif-creator` | Slack GIF 動圖製作 |
+| `knowledge-video-factory` | 影片/Podcast 製作（含語音、腳本、素材） |
+| `chat-gif-animator` | Slack GIF 動圖製作 |
+| `soundtrack-mixer` | 配樂搜尋（Openverse）與 ffmpeg 混音 |
+| `hum-to-score` | 哼唱轉 MIDI/簡譜，雙向往返修改 |
 | `internal-comms` | 內部溝通文件 |
 
 ### 語音
 | Skill | 說明 |
 |-------|------|
-| `xu-yaowen-voice` | 🪟🍎 許耀文語音克隆 TTS（VoxCPM2，支援 Windows + macOS）|
+| `xu-yaowen-tts` | 🪟🍎 許耀文語音克隆 TTS（VoxCPM2，支援 Windows + macOS）|
 
 ### 其他
 | Skill | 說明 |

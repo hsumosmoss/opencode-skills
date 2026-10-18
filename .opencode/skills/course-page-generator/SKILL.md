@@ -6,12 +6,12 @@ compatibility: opencode
 
 # Course Page Generator
 
-原始講稿 → 結構化 Markdown → `node ~/.gemini/antigravity/skills/course-page-generator/scripts/build.mjs <dir>` → `index.html` → `node ~/.gemini/antigravity/skills/course-page-generator/scripts/generate-og.mjs <dir>` → `assets/og-*.jpg`
+原始講稿 → 結構化 Markdown → `node ~/.config/opencode/skills/course-page-generator/scripts/build.mjs <dir>` → `index.html` → `node ~/.config/opencode/skills/course-page-generator/scripts/generate-og.mjs <dir>` → `assets/og-*.jpg`
 
 ## 專案結構
 
 ```
-~/.gemini/antigravity/skills/course-page-generator/
+~/.config/opencode/skills/course-page-generator/
 ├── scripts/
 │   ├── build.mjs          # 課程頁 build script
 │   └── generate-og.mjs    # 針對課程頁產出 1200x630 OG 縮圖（依賴 Puppeteer）
@@ -299,17 +299,17 @@ YAML 完整範例：[config-example.yaml](reference/config-example.yaml)
 
 ```bash
 # Step 3: Build 課程頁
-node ~/.gemini/antigravity/skills/course-page-generator/scripts/build.mjs <course-dir>
+node ~/.config/opencode/skills/course-page-generator/scripts/build.mjs <course-dir>
 
 # Step 4: 產生 OG 縮圖（build 成功後立即執行）
-node ~/.gemini/antigravity/skills/course-page-generator/scripts/generate-og.mjs <course-dir>
+node ~/.config/opencode/skills/course-page-generator/scripts/generate-og.mjs <course-dir>
 ```
 
 範例：
 
 ```bash
-node ~/.gemini/antigravity/skills/course-page-generator/scripts/build.mjs course/cake
-node ~/.gemini/antigravity/skills/course-page-generator/scripts/generate-og.mjs course/cake
+node ~/.config/opencode/skills/course-page-generator/scripts/build.mjs course/cake
+node ~/.config/opencode/skills/course-page-generator/scripts/generate-og.mjs course/cake
 ```
 
 **Step 3 — Build 自動流程：**

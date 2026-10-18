@@ -77,14 +77,14 @@ cp -r .opencode/skills/ ~/.config/opencode/skills/
 
 ---
 
-## 所有 29 個 Skills 與依賴總表
+## 所有 31 個 Skills 與依賴總表
 
 ### 🎬 影片製作
 
 | Skill | 平台 | 用途 | 必要依賴 |
 |-------|------|------|---------|
-| `video-maker` | 🍎🪟 | 活動紀錄 / 教學 / 社群科普影片 | ffmpeg, edge-tts, Playwright, Node.js |
-| `video-podcast-maker` | 🍎🐧 | 自動化 4K 影片播客（Remotion） | ffmpeg, edge-tts, Node.js, yarn, Remotion |
+| `short-video-maker` | 🍎🪟 | 活動紀錄 / 教學 / 社群科普影片 | ffmpeg, edge-tts, Playwright, Node.js |
+| `knowledge-video-factory` | 🍎🐧 | 自動化 4K 影片播客（Remotion） | ffmpeg, edge-tts, Node.js, yarn, Remotion |
 
 ### 📄 文件處理
 
@@ -100,12 +100,12 @@ cp -r .opencode/skills/ ~/.config/opencode/skills/
 | Skill | 平台 | 用途 | 必要依賴 |
 |-------|------|------|---------|
 | `canvas-design` | 🍎🪟 | PNG/PDF 設計圖產出 | 無（系統字體） |
-| `algorithmic-art` | 🍎🪟 | p5.js 生成式藝術 | 無（CDN p5.js） |
+| `generative-art-animation` | 🍎🪟 | p5.js 生成式藝術 | 無（CDN p5.js） |
 | `frontend-design` | 🍎🪟 | Web 前端設計指南 | 無（CDN 資源） |
 | `web-design-engineer` | 🍎🪟 | HTML/CSS/JS/React 頁面 | 無（CDN 資源） |
 | `brand-guidelines` | 🍎🪟 | 品牌色/字型規範 | 無（純文件）|
 | `theme-factory` | 🍎🪟 | 主題配色套用 | 無（純參考）|
-| `huashu-design` | 🍎🪟 | HTML 高保真原型/動畫 | Playwright, ffmpeg, yt-dlp, sharp |
+| `html-motion-design` | 🍎🪟 | HTML 高保真原型/動畫 | Playwright, ffmpeg, yt-dlp, sharp |
 | `web-artifacts-builder` | 🍎🪟 | React+Tailwind 複雜 artifact | Node.js, npm |
 
 ### 📊 簡報與教學
@@ -113,9 +113,9 @@ cp -r .opencode/skills/ ~/.config/opencode/skills/
 | Skill | 平台 | 用途 | 必要依賴 |
 |-------|------|------|---------|
 | `presentation-architect` | 🍎🪟 | 簡報架構企劃（雙模式） | Python 3 |
-| `soil-html-deck` | 🍎🪟 | HTML 互動簡報 | Python 3 |
-| `soil-image-deck` | 🍎🪟 | 全圖片 PPTX 簡報 | python-pptx, Pillow, PyYAML |
-| `soil-teaching-deck` | 🍎🪟 | SOIL 教學 PPTX | python-pptx |
+| `interactive-html-slides` | 🍎🪟 | HTML 互動簡報 | Python 3 |
+| `image-first-slides` | 🍎🪟 | 全圖片 PPTX 簡報 | python-pptx, Pillow, PyYAML |
+| `teaching-slide-optimizer` | 🍎🪟 | SOIL 教學 PPTX | python-pptx |
 | `course-page-generator` | 🍎🪟 | 課程頁面 + OG 縮圖 | Node.js, Puppeteer |
 | `course-handout-generator` | 🍎🪟 | 教學講義 Markdown→HTML 建置管線 | Node.js, js-yaml |
 
@@ -132,14 +132,16 @@ cp -r .opencode/skills/ ~/.config/opencode/skills/
 
 | Skill | 平台 | 用途 | 必要依賴 |
 |-------|------|------|---------|
-| `slack-gif-creator` | 🍎🪟 | Slack 最佳化 GIF 動圖 | pillow, imageio, numpy |
+| `chat-gif-animator` | 🍎🪟 | Slack 最佳化 GIF 動圖 | pillow, imageio, numpy |
+| `soundtrack-mixer` | 🍎🪟 | 配樂搜尋（Openverse）與 ffmpeg 混音 | ffmpeg, Python 3 |
+| `hum-to-score` | 🍎🪟 | 哼唱轉 MIDI/簡譜，雙向往返修改 | Python 3, fluidsynth（選配）|
 | `internal-comms` | 🍎🪟 | 內部通訊文件模板 | 無（純模板）|
 
 ### 🗣️ 語音
 
 | Skill | 平台 | 用途 | 必要依賴 |
 |-------|------|------|---------|
-| `xu-yaowen-voice` | 🪟🍎 | 許耀文語音克隆 TTS（VoxCPM2） | NVIDIA GPU / Apple Silicon MPS, Python 3.10–3.12, voxcpm |
+| `xu-yaowen-tts` | 🪟🍎 | 許耀文語音克隆 TTS（VoxCPM2） | NVIDIA GPU / Apple Silicon MPS, Python 3.10–3.12, voxcpm |
 
 ### 📝 其他
 
@@ -162,7 +164,7 @@ cp -r .opencode/skills/ ~/.config/opencode/skills/
 
 ---
 
-## 影片製作速查（video-maker）
+## 影片製作速查（short-video-maker）
 
 ```bash
 # 1. 產生旁白（edge-tts 男聲）
@@ -181,7 +183,7 @@ ffmpeg -y -ss 3 -i renders/*.webm -i master_audio.mp3 \
   -movflags +faststart final.mp4
 ```
 
-> ⚠️ 踩坑紀錄見 [video-maker/GOTCHAS.md](.opencode/skills/video-maker/GOTCHAS.md)
+> ⚠️ 踩坑紀錄見 [short-video-maker/GOTCHAS.md](.opencode/skills/short-video-maker/GOTCHAS.md)
 
 ---
 
@@ -241,8 +243,8 @@ compatibility: opencode
 
 | 環境 | 晶片 | 測試日期 | 測試項目 |
 |------|------|---------|---------|
-| macOS Sequoia 15.5 | Apple Silicon M4 | 2026-06-19 | video-maker 完整流程（edge-tts 旁白 + Playwright 錄影 + ffmpeg 合成）|
-| Windows | x86_64 | 2025 | video-maker 原始開發環境 |
+| macOS Sequoia 15.5 | Apple Silicon M4 | 2026-06-19 | short-video-maker 完整流程（edge-tts 旁白 + Playwright 錄影 + ffmpeg 合成）|
+| Windows | x86_64 | 2025 | short-video-maker 原始開發環境 |
 
 ---
 
