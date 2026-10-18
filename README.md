@@ -77,7 +77,7 @@ cp -r .opencode/skills/ ~/.config/opencode/skills/
 
 ---
 
-## 所有 34 個 Skills 與依賴總表
+## 所有 35 個 Skills 與依賴總表
 
 ### 🎬 影片製作
 
@@ -88,6 +88,7 @@ cp -r .opencode/skills/ ~/.config/opencode/skills/
 | `short-video-teardown` | 🍎🪟 | 短影音爆款拆解（競品分析→腳本+分鏡） | uv, yt-dlp, ffmpeg；選配 GEMINI_API_KEY、faster-whisper |
 | `video-script-maker` | 🍎🪟 | 影片腳本前製（大綱→審校→封標檢查） | 無（純流程）|
 | `code-animation-director` | 🍎🪟 | 程式碼動畫導演（藝術風格/解說動畫） | uv, ffmpeg, Playwright Chromium |
+| `font-prompt-picker` | 🔤 | AI 生圖字體風格提示詞庫（161 種，挑風格→套模板→輸出提示詞） | 無（純資料庫）|
 
 ### 📄 文件處理
 
