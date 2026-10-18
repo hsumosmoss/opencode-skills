@@ -77,7 +77,7 @@ cp -r .opencode/skills/ ~/.config/opencode/skills/
 
 ---
 
-## 所有 36 個 Skills 與依賴總表
+## 所有 39 個 Skills 與依賴總表
 
 ### 🎬 影片製作
 
@@ -88,6 +88,9 @@ cp -r .opencode/skills/ ~/.config/opencode/skills/
 | `short-video-teardown` | 🍎🪟 | 短影音爆款拆解（競品分析→腳本+分鏡） | uv, yt-dlp, ffmpeg；選配 GEMINI_API_KEY、faster-whisper |
 | `video-script-maker` | 🍎🪟 | 影片腳本前製（大綱→審校→封標檢查） | 無（純流程）|
 | `code-animation-director` | 🍎🪟 | 程式碼動畫導演（藝術風格/解說動畫） | uv, ffmpeg, Playwright Chromium |
+| `explainer-video-maker` | 🍎🪟🐧 | 原理解說動畫一條龍（研究→旁白→分格動畫→審查→MP4；收編 claude-motion-explainer） | Node 22+, ffmpeg, Python+Pillow+fonttools, Git Bash, edge-tts, HyperFrames CLI |
+| `animation-design-rules` | 🍎🪟🐧 | 動畫品味規則（緩動/節奏/停留/繁中排版/三色，附具體數字） | 無（純規則）|
+| `animation-review-loop` | 🍎🪟🐧 | 動畫審查循環（contact sheet 逐格對照檢查表） | Python+Pillow, ffmpeg |
 
 [^kvf]: Windows 可用（依賴均已驗證：python3/ffmpeg/node/edge-tts），但上游僅聲明 macOS/Linux 支援——文件內 bash 片段需改寫為 pwsh 等效語法，指定字型 PingFang SC 為 macOS 專有（建議於 Windows 安裝 Noto Sans SC 取得最佳效果）。
 
