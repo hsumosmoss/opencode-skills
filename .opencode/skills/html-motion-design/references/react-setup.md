@@ -16,6 +16,29 @@
 
 **不要**省略`integrity`——CDN一旦被劫持或篡改，这是防线。
 
+## integrity 校验失败时 —— 降级为本地 vendor，不是删掉 integrity
+
+**踩的坑（2026-10-18）**：unpkg 拉下来的文件 SRI hash 对不上（疑似中间层缓存篡改或 CDN 重建产物），浏览器 console 报 `Failed to find a valid digest`，React 拒绝执行，整页黑屏。第一反应如果是「删掉 integrity 就能跑」——**错，这等于拆掉防线**。
+
+**正确降级顺序**：
+1. 先换 CDN 试（unpkg → jsdelivr → esm.sh），有时只是单 CDN 缓存坏
+2. 仍然失败 → **下载固定版本到项目本地 `assets/vendor/`**，用相对路径引用：
+   ```html
+   <script src="assets/vendor/react.development.js"></script>
+   <script src="assets/vendor/react-dom.development.js"></script>
+   <script src="assets/vendor/babel.min.js"></script>
+   ```
+3. 本地 vendor 对单文件交付也更优：**双击 file:// 打开零网络依赖**，离线/内网演示不炸
+4. 在项目 README 里记录 vendor 版本号（`react@18.3.1` 等），升级时有据可查
+
+**副作用检查**：Babel in-browser 编译时 console 会报「You are using the in-browser Babel transformer」warning——这是**正常的**，不是错误。验证脚本的错误过滤要区分 warning 与 error。
+
+## 字体也要本地化 —— fonts.css 的相对路径陷阱
+
+下载的 webfont 包里 `fonts.css` 的 `url()` 是**相对于 CSS 文件位置**解析的。如果 CSS 在 `assets/fonts/fonts.css` 里写 `url(assets/fonts/xxx.woff2)`，浏览器会去找 `assets/fonts/assets/fonts/xxx.woff2` → 404 → 字体静默 fallback（不报 error，只是字形不对）。
+
+**规则**：把 fonts.css 挪到项目根、或改写其中 url 为**裸文件名**（与 css 同目录）；另外下载时注意长文件名 + 非 ASCII 文件名会被某些下载工具**截断或转码**——下载后必须 `Get-ChildItem` 核对磁盘上真实文件名，与 CSS 引用逐一对上。
+
 ## 文件结构
 
 ```

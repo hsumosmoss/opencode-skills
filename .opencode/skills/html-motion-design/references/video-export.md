@@ -207,3 +207,40 @@ GIF 只能 256 色。一次 pass 的 GIF 会把全动画色彩压到 256 色通�
 | 「加水印」 | ffmpeg 加 `-vf "drawtext=..."` 或 `overlay=` 一个 PNG |
 | 「要透明背景」 | MP4 不支持 alpha；用 WebM VP9 + alpha 或 APNG |
 | 「要无损」 | CRF 改 0 + preset veryslow（文件会大 10 倍） |
+
+## Windows / PowerShell 混音实录坑（旁白 + SFX + BGM 多轨）
+
+**踩的坑（2026-10-18，148s 旁白解说片混音）**：多轨混音（N 段旁白 adelay 对齐 + 10+ SFX cue + BGM 垫底 + loudnorm）在 pwsh 下踩了一串坑，全记录如下：
+
+### PowerShell 字符串陷阱
+
+```powershell
+# ❌ "$i:a]" —— PowerShell 把 $i:a 当作用域限定符解析，标签变空 "[]"
+# ❌ "${i}:a]" —— 又因 [.Replace() 吃掉引号
+# ✅ 用 format 或单引号拼接：
+'[0:a]' -f $i     # 或 "[{0}:a]" -f $i
+```
+- **正则替换的 replacement 用单引号**：`[regex]::Replace($s, $pat, '$1xxx')` 的 replacement 若用双引号，`$1` 先被 PowerShell 当变量展开成空
+- **ffmpeg 参数含引号/空格**：用 call operator + 数组传参，不内嵌引号到单字符串里
+  ```powershell
+  $args = @('-i', $in, '-filter_complex', $fc, '-y', $out)
+  & ffmpeg @args
+  ```
+
+### filter_complex_script 文件
+
+- 多滤镜用 **`;` 分隔**（不是换行符——换行会被解析器拒绝）
+- 文件必须 **UTF-8 无 BOM**：`[IO.File]::WriteAllText($path, $text, (New-Object Text.UTF8Encoding($false)))`——BOM 会让 ffmpeg 报 "No such filter" 指向莫名其妙的位置
+
+### 输入索引与 adelay
+
+- `-i` 参数顺序 = filter 里的输入编号 `0: 1: 2: ...`。混音时**第 0 路永远是视频**，旁白从 `1:` 开始数——数错一路，整段音轨错位
+- 多段旁白各自 `adelay=ms|ms`（左右声道各一份，用 `|` 分隔），后接 `amix=inputs=N:normalize=0`——不关 normalize 会让每加一段总音量就掉一半
+
+### SFX 目录结构
+
+`assets/sfx/` 不是平铺——按类别分**子目录**：`container/ feedback/ impact/ magic/ progress/ transition/ ui/`。引用前先 `Get-ChildItem -Recurse` 列表确认真实路径和文件名（文件名含空格/大小写陷阱）。
+
+### 响度终修
+
+多轨 amix 之后统一 `loudnorm=I=-16:TP=-1.5:LRA=11` 单遍即可（解说片不需要两遍 EBU R128 精修）。交付前用 `ffmpeg -i out.mp4 -af astats=metadata=1 -f null -` 或解码抽样确认 mean/max dBFS 在合理区间（解说 -18dB mean / -6dB peak 附近）、结尾有正常淡出。

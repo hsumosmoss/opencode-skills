@@ -360,6 +360,117 @@ bash convert-formats.sh input.mp4 --minterpolate
 
 这条坑的隐蔽性在于——**没有 bug 报警**。只有人眼或 OCR 能发现。
 
+## 17. React 渲染三连坑 —— function children、元素 identity bailout、每帧重建
+
+**踩的坑（2026-10-18 真实事故，Tesla Roadster 148s 解说动画）**：三个坑叠加，症状都是「画面不更新/不渲染」，但根因完全不同：
+
+### 17a. function children 不渲染
+
+把 `{s.component}` 直接放进 JSX children——React 把函数当普通 child，不调用、不渲染，画面空白。
+
+```jsx
+// ❌ 函数 child 不渲染
+<SceneWrap>{scene.component}</SceneWrap>
+
+// ✅ 方式一：传 component prop，父组件里 createElement
+<SceneWrap comp={scene.component} />
+const SceneWrap = ({ comp }) => <div>{React.createElement(comp)}</div>;
+
+// ✅ 方式二：直接在 JSX 里实例化
+<SceneWrap><scene.component /></SceneWrap>   // 大写变量名才能被 JSX 识别为组件
+```
+
+### 17b. 元素 identity bailout（最隐蔽）
+
+在 `App()` 函数开头创建 children 元素（`const kids = <Scene1 ctx={...}/>`），React 每次 render 比对 element：**type 相同 + props 浅比较相同 → 直接复用旧 fiber，子组件不重新渲染**。Context provider 更新了、`hasCtx` 在父组件里明明有值，但子组件画面冻结在第一帧。
+
+```jsx
+// ❌ 元素在 App 开头建一次，子组件被 bailout 冻结
+function App() {
+  const t = useTime();
+  return <Provider value={{t}}><Scene1/></Provider>;   // <Scene1/> 每次是新元素 OK
+}
+// 但如果是：
+const scene = React.useMemo(() => <Scene1/>, []);     // ← 同一元素引用，永久 bailout
+```
+
+**规则**：动画每帧都要重渲染的组件，**禁止**用 memo/useMemo 缓存元素引用。判断口诀——「动画状态变了但画面没变」= 先怀疑 identity bailout。
+
+### 17c. 每帧 createElement 强制重渲染
+
+在 Scene 包装层里**每帧**用 `React.createElement(component)` 新建元素，让 React 无法 bailout：
+
+```jsx
+function SceneWindow({ comp: Comp, start, end }) {
+  const t = useTime();
+  const local = t - start;
+  if (local < -0.5 || local > end - start + 0.5) return null;
+  return <div style={{opacity: fadeInOut(local)}}>
+    <Comp key={t} />   {/* 或 createElement(Comp)——每次新元素，强制重渲染 */}
+  </div>;
+}
+```
+
+**验证手法**：在可疑组件里 `console.log('render', t)`，或把 progress 写到 `window.__ua` 临时对象，用 Playwright 读——「context 有值但组件没 render」即为 bailout。
+
+## 18. 引擎 API 落差 —— 先读 animations.jsx 再写场景代码
+
+**踩的坑**：照着 SKILL.md 里「完整版引擎」的文档写场景（`anims.sequence` / `makeProgress` / `useAnim`），但项目里落地的 `assets/animations.jsx` 是基础版（只有 Stage / Sprite / useTime）——第一版场景代码 100% 跑不起来，全部重写。
+
+**规则**：
+- **写任何场景组件之前，先打开项目实际使用的引擎文件，列出可用 API 清单**（组件名 + hook 名 + props），贴到对话上下文里再动手
+- 文档与落地引擎不一致时，以**文件**为准；文档描述的高级 API 若不存在，在 app 层自建薄兼容层（`AnimCtx` + `useAnim` + `makeProgress` + `Scene` 窗口淡入淡出），而不是等引擎补齐
+- 兼容层注意：`useAnim` 依赖的 context 值每帧变化，配合 §17 的「每帧 createElement」才真正生效
+
+## 19. out 动画语义 —— from:1 to:0 直接相乘，不是 1-减
+
+**踩的坑**：面板的出场动画定义为 `out: {from: 1, to: 0}`（值本身从 1 走到 0），我却按「out 是进度 0→1」的直觉写成 `opacity: P('xIn') * (1 - P('xOut'))`——结果面板入场即消失（1×(1-1)=0）。
+
+**规则**：动画的 `from/to` 是**值域**，不是进度域。先确认语义再组合：
+```jsx
+// out 定义为 from:1 to:0（值衰减）→ 直接乘
+opacity: P('panelIn') * P('panelOut');
+
+// out 定义为 from:0 to:1（进度推进）→ 才用减
+opacity: P('panelIn') * (1 - P('panelOut'));
+```
+**调试锚点**：`opacity: 0` 的面板是乘反了；「面板堆叠不消失」是只绑了 In 没绑 Out。
+
+## 20. P() 传参形状 —— 传 prop 名字符串，不是 prop 对象
+
+**踩的坑**：兼容层定义 `const P = (name) => p(name)`（传字符串），调用处却写成 `P(someObj.propName)` 之外还试过 `P({name: 'xIn'})` 之类——progress 恒为 0，整场景静止。
+
+**规则**：自建兼容层时，**先写一行注释固定 API 形状**，所有调用处照抄：
+```jsx
+const P = (name) => p(name);   // ← P('xIn')，传字符串！
+```
+发现「进度恒 0 / 恒 1」时，第一件事是打印 `window.__ua`（把 p() 的调用名和值记录进去）确认 API 匹配，而不是去改场景逻辑。
+
+## 21. 组装式模板 —— 只改源文件，产物 HTML 是只读的
+
+**踩的坑**：项目用 `template.html`（含 `@@APP@@` 标记）+ `assemble.ps1` 组装出最终 HTML。我调试时直接改了产物 HTML，下次 assemble 一跑——修改全被覆盖，白改一轮。
+
+**规则**：
+- 有组装管线的项目，**产物 HTML 永远不手改**；一切修改进 `app-part*.jsx` 源文件 → 跑 assemble → 验证
+- 开工前先确认三件事并写进项目笔记：①组装脚本路径与调用方式 ②哪些文件是源、哪些是产物 ③vendor 资产（React/字体）是本地内嵌还是 CDN
+- 产物 HTML 需要「可双击打开」时，所有外部依赖（React/ReactDOM/Babel/字体）必须**内联或本地 vendor**——CDN SRI 校验失败时浏览器直接拒绝执行，整页黑屏且只有 console error（见 react-setup.md「本地 vendor 降级」）
+
+## 22. Playwright 时间加速验证 —— 引擎用 rAF timestamp，不是 performance.now
+
+**踩的坑**：想用 Playwright 把 148 秒动画加速 8 倍做全时间轴截图验证。只 override 了 `performance.now`，引擎画面纹丝不动——因为引擎的时间源是 **requestAnimationFrame 回调收到的 timestamp 参数**，不是 performance.now。
+
+**正确做法**（init script 注入）：
+```js
+const _rAF = window.requestAnimationFrame.bind(window);
+const SPEED = 8;
+const origin = performance.now();
+window.requestAnimationFrame = (cb) =>
+  _rAF((ts) => cb((ts - origin) * SPEED + origin));
+```
+**配套**：页面里留一个「时间显示」DOM（如 `<div class="time-display">`），Playwright 用 `waitForFunction` 轮询它对齐到目标时间再截图——比固定 sleep 稳（加速倍率受机器负载影响会漂）。
+
+**前置**：`python -m playwright install chromium`（Windows 上 playwright python 与 render-video.js 共用同一份 chromium 快取，装一次两处受益）。
+
 ## 快速自查清单（开工前 5 秒）
 
 - [ ] 每个 `position: absolute` 的父元素都有 `position: relative`？
@@ -378,3 +489,9 @@ bash convert-formats.sh input.mp4 --minterpolate
 - [ ] 涉及具体品牌（Stripe/Anthropic/Lovart/...）：走完了「品牌资产协议」（SKILL.md §1.a 五步）？有没有写 `brand-spec.md`？
 - [ ] 单文件交付的 HTML：`animations.jsx` 是内联的，不是 `src="..."`？（file:// 下 external .jsx 会 CORS 黑屏）
 - [ ] 跨 scene 出现的元素（chapter 标签/水印/scene 编号）没有硬编码颜色？在每个 scene 底色下都可见？
+- [ ] 每帧重渲染的组件没有被 memo/useMemo 缓存元素引用？（bailout 冻结）
+- [ ] 组件子节点用 createElement 或 `<Comp/>`，不是把函数塞进 children？
+- [ ] 用引擎前打开 animations.jsx 确认 API 真实存在？（文档≠落地版本）
+- [ ] out 动画的 from/to 语义确认过？（from:1→0 直接乘，from:0→1 才用 1-减）
+- [ ] 有组装管线：改动只进源文件，产物 HTML 零手改？
+- [ ] Playwright 加速用 rAF timestamp override（不是 performance.now）？

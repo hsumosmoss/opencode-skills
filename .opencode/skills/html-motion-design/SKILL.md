@@ -665,7 +665,8 @@ Screen 元件接 callback props（`onEnter`、`onClose`、`onTabChange`、`onOpe
 | 需求模糊到無法著手 | 使用者只給一句模糊描述（如"做個好看的頁面"） | 主動列3個可能方向讓使用者選（如"落地頁 / Dashboard / 產品詳情頁"），而不是直接問10個問題 |
 | 使用者拒絕回答問題清單 | 使用者說"不要問了，直接做" | 尊重節奏，用best judgment做1個主方案+1個差異明顯的變體，交付時**明確標註assumption**，方便使用者定位要改哪裡 |
 | Design context矛盾 | 使用者給的參考圖和品牌規範打架 | 停下，指出具體矛盾（"截圖裡字型是襯線，規範說用sans"），讓使用者選一個 |
-| Starter component載入失敗 | 控制檯404/integrity mismatch | 先查`references/react-setup.md`常見報錯表；還不行降級純HTML+CSS不用React，保證產出可用 |
+| Starter component載入失敗 | 控制檯404/integrity mismatch | 先查`references/react-setup.md`常見報錯表；integrity 對不上→換 CDN→再不行下載固定版本到 `assets/vendor/` 本地化（**不要直接刪 integrity**）；還不行降級純HTML+CSS不用React，保證產出可用 |
+| 畫面凍結不更新（無報錯） | context 有值但子組件不重渲染 | React 元素 identity bailout——見 `references/animation-pitfalls.md` §17（每幀 createElement / 別 memo 元素引用） |
 | 時間緊迫要快交付 | 使用者說"30分鐘內要" | 跳過Junior pass直接Full pass，只做1個方案，交付時**明確標註"未經early validation"**，提醒使用者質量可能打折 |
 | SKILL.md體積超限 | 新寫HTML>1000行 | 按`references/react-setup.md`的拆分策略拆成多jsx檔案，末尾`Object.assign(window,...)`共享 |
 | 剋制原則 vs 產品所需密度衝突 | 產品核心賣點是 AI 智慧 / 資料視覺化 / 上下文感知（如番茄鍾、Dashboard、Tracker、AI agent、Copilot、記賬、健康監測）| 按「品位錨點」表格走**高密度型**資訊密度：每屏 ≥ 3 處產品差異化資訊。裝飾性 icon 照樣忌諱——加的是**有內容的**密度，不是裝飾 |
@@ -798,5 +799,6 @@ Skill 路徑引用均採用**相對本 skill 根目錄**的形式（`references/
 - **Placeholder優於爛實現**：誠實留白，不編造。
 - **反AI slop時時警醒**：每個漸變/emoji/圓角border accent之前先問——這真的必要嗎？
 - **涉及具體品牌**：走「核心資產協議」（§1.a）——Logo（必需）+ 產品圖（實體產品必需）+ UI 截圖（數字產品必需），色值只是輔助。**不要用 CSS 剪影代替真實產品圖**。
-- **做動畫之前**：必讀 `references/animation-pitfalls.md`——裡面 14 條規則每條都來自真實踩過的坑，跳過會讓你重做 1-3 輪。
+- **做動畫之前**：必讀 `references/animation-pitfalls.md`——裡面 22 條規則每條都來自真實踩過的坑（含 React 渲染 bailout、引擎 API 落差、Playwright 加速驗證），跳過會讓你重做 1-3 輪。
+- **多軌混音（旁白+SFX+BGM）在 Windows/pwsh 下**：`references/video-export.md` 末章有完整的 PowerShell + ffmpeg 踩坑實錄（引號陷阱、filter_complex_script BOM、adelay 輸入索引）。
 - **手寫 Stage / Sprite**（不用 `assets/animations.jsx`）：必須實現兩件事——(a) tick 第一幀同步設 `window.__ready = true` (b) 檢測 `window.__recording === true` 時強制 loop=false。否則錄影片必出問題。
