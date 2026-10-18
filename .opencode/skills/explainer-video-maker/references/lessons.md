@@ -69,4 +69,6 @@
 39. **SVG 的 scaleY 補間不要用百分比 transformOrigin**：第 3 格九格/16 格填充用 `transformOrigin: "50% 100%"` 對 SVG rect 做 scaleY，補間期間填充相對格線整批偏移一行（使用者在 25 秒看到「跑偏了一行」）。SVG 元素一律用 `svgOrigin`（絕對座標），並抽補間中段的幀確認對齊。
 40. **Windows pwsh 內嵌 python -c 反覆炸引號**：診斷時 `python -c "…"` 連續三次 ParserError（括號、冒號、字串引號被 pwsh 拆掉）。診斷腳本一律寫成臨時 .py 檔（放 `%TEMP%\opencode\`）再執行；輸出中文前先 `[Console]::OutputEncoding = UTF8` 或 `sys.stdout.reconfigure(encoding='utf-8')`。
 41. **被中斷的安裝指令要驗證目錄，不要看輸出**：`hyperframes skills update` 中斷兩次，實際上都裝完了。中斷 ≠ 失敗；用目錄清單（關鍵檔案存在與否）確認，別重跑造成重複安裝。
+42. **theme.py 會把「Noto Sans TC」加進字體堆疊，卻不給 @font-face**：worker 把它當 fallback 字型用時，lint 會報 missing font-face。修法：補一條 `@font-face { font-family: "Noto Sans TC"; src: local("Noto Sans TC"); }` 進該格檔案**和** `.hyperframes/pre-theme/` 那一份；只補套色檔，下一次 theme.py 重跑就再掉一次（這次實際發生兩次：補了 → 重跑被蓋 → 再補）。
+43. **sub-agent 重寫元素會丟掉 `data-layout-allow-overlap`**：第 6 格 worker 加粗「12 m」標籤時重寫文字元素，把先前為過 check 加的 `data-layout-allow-overlap` 弄丟，check 再次報文字重疊。任何為過 check 加上的 data-* 屬性，只要 sub-agent 動過同一格，就要重新檢查還在不在；事後也要回頭想為什麼兩個文字要疊在一起——能用一個元素改色就不要疊兩個。
 

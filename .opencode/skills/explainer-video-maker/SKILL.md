@@ -118,7 +118,7 @@ node <fe>/scripts/transitions.mjs verify --storyboard ./STORYBOARD.md --index ./
 hyperframes lint && hyperframes check
 ```
 
-（`<fe>` = 已安裝的 faceless-explainer skill 資料夾。）字幕每次重建後，都要重跑 `patch_captions.py` 再跑 `theme.py`。`theme.json` 的 `accents` 指定每一格裡哪些元素用強調色（block／fill／text／stroke）。`theme.py` 會自動認出重新產生過的檔案（沒有 `(theme.py)` 標記的），拿它當新的原始檔；但手動改已套色的檔案時，`.hyperframes/pre-theme/` 裡那一份也要一起改。`transitions.mjs inject` 會延長每一格的長度：每次跑完 `theme.py` 都要再 inject 一次，但不要連續 inject 兩次（中間沒有跑 `theme.py` 的話，長度會被延長兩次）；`font` 會把每一格和字幕的所有文字都換成同一個字型和字重，覆蓋 worker 原本寫的字型設定。換字型後字變寬了，要重跑 `hyperframes check` 看有沒有溢出或重疊。
+（`<fe>` = 已安裝的 faceless-explainer skill 資料夾。）字幕每次重建後，都要重跑 `patch_captions.py` 再跑 `theme.py`。`theme.json` 的 `accents` 指定每一格裡哪些元素用強調色（block／fill／text／stroke）。`theme.py` 會自動認出重新產生過的檔案（沒有 `(theme.py)` 標記的），拿它當新的原始檔；但手動改已套色的檔案時，`.hyperframes/pre-theme/` 裡那一份也要一起改。`transitions.mjs inject` 會延長每一格的長度：每次跑完 `theme.py` 都要再 inject 一次，但不要連續 inject 兩次（中間沒有跑 `theme.py` 的話，長度會被延長兩次）；`font` 會把每一格和字幕的所有文字都換成同一個字型和字重，覆蓋 worker 原本寫的字型設定。換字型後字變寬了，要重跑 `hyperframes check` 看有沒有溢出或重疊。**每次重跑 `theme.py` 之後，抽查一個「套色後改過的值」（例如 stroke-width）確認修改還活著**（被蓋掉的實例見 lessons #32、#42）；**`hyperframes check` 顯示 0 samples／「Browser session never ran」是假通過**，只有看到 N sample(s)（N>0）才算真的跑過，要重跑（lessons #33）。
 
 **最後一步才瘦身字型**：`python <me>/scripts/subset_fonts.py --project .`。它會只留下片中用到的中文字（CJK 字型從 12–17 MB 降到幾百 KB），並把每一格的 `@font-face` 改指向瘦身後的檔案。任何改動文字、字幕或配色的動作之後都要重跑：`theme.py` 每次都從配色前的原始檔重新套色，原始檔指向的是完整字型，新加的字如果不在瘦身檔裡，就會退回系統字型。
 
@@ -129,6 +129,7 @@ hyperframes lint && hyperframes check
   python <animation-review-loop>/scripts/sheet.py --video renders/draft.mp4 --at "$(python <me>/scripts/review_times.py --project .)" --out review --name draft
   ```
 - 對照 `references/lessons.md` 的檢查表逐項看，修完重新輸出、重新看，直到一輪都沒有問題。
+- **pop-in 元素（svgOrigin 縮放的記號、徽章、格線填充）的靜止位置，要從 draft 成片抽穩定幀做像素量測**（找強調色叢集的 bbox 比對靜態座標）；靜態 HTML 座標正確不代表成片正確，補間殘留位移只會出現在成片上（實例見 lessons #38、#39）。
 - 看完才輸出最終版：`hyperframes render --skill=faceless-explainer --quality high --output renders/video.mp4`，再量一次響度。
 
 ## 9. 交付
