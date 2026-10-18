@@ -57,3 +57,16 @@
 30. **翻牌卡**：正反兩面疊在同一個位置，`hyperframes check` 會判成文字重疊（錯誤）。在兩面的容器上加 `data-layout-allow-overlap`；加在整格的根元素上沒用。
 31. **斜放的正方形**（畢氏定理斜邊上的 5×5）：用一個 HTML 方塊整個旋轉（36.87°），動畫只動它裡面的子元素。直接對旋轉過的容器做 GSAP 動畫，會把 rotate 蓋掉。
 
+## 第三支片（畢氏定理重製，8 格、73 秒，許耀文 VoxCPM2 配音）
+
+32. **已套色檔案上的修改，再跑一次 theme.py 就全沒了（這次真的掉了）**：初稿審查後把第 1、2、6 格的線加粗（6→10 px）、標籤放大 40%，修改只寫在 `compositions/frames/` 的套色檔上，沒有同步 `.hyperframes/pre-theme/`。之後為了修字型重跑 `theme.py`，它從 pre-theme 原始檔重新產生，強化修改整批被蓋回初版；`check` 照樣通過，最後成片輸出的就是沒強化的版本。規則：**任何「套色之後」的手動修改，pre-theme 那一份一定要一起改**；每跑完一次 theme.py，就抽一個改過的值（例如 stroke-width）確認還活著，再往下走。
+33. **check 說「Browser session never ran」就是假通過**：有一輪 `hyperframes check` 顯示 layout 0 issues、0 samples，並註明 "empty placeholders, not a clean pass"。**只有看到 `N sample(s)`（N>0）才算真的跑過**；0 samples 要重跑。lint 全過 ≠ layout 通過。
+34. **共用幾何要先算驗證再派工**：派工註解裡手寫的斜邊正方形遠端兩角算錯（寫成 (240,-180)，正確是垂直向量 (180,-240)），照那個座標畫出來是菱形不是正方形。worker 用面積檢查（Σ=86400 ≠ 90000）抓到並回報。派工前用點積=0、面積=n² 驗證共用座標；worker 發現共用幾何矛盾時要主動回報（這次的行為是對的，要保留）。
+35. **check 過了不等於投影看得清楚**：第一輪 draft layout 全過，但 6 px 細線稿在 1920×1080、教室投影比例下太弱。要以真實觀看距離看 contact sheet，線加粗到 10 px、標籤放大 40%。layout 檢查不會判「視覺太弱」，強度要人眼在 draft 之後補一輪（但見 #32：強化修改要活到最後一次 theme.py 之後）。
+36. **護欄間距照「最終線寬」算，而且要在成片上親眼驗證**：worker 自報 b² 徽章離 b 線 9 px，是照 4 px 線寬算的；線加粗後間距就不夠，使用者在成片上看到 b² 蓋住 b 線。worker 自報的間距數字不能只信，線寬改過要重算，最後在穩定幀上親眼看。
+37. **聲音克隆 TTS 要批次載入模型**：VoxCPM2 逐句呼叫 `clone.py`，每句都重載 4.7 GB 模型（每句多花約 99 秒）。寫一個批次腳本（如 `batch_tts.py`）一次載入模型、逐句輸出 `assets/voice/raw/NN.wav`：8 句實測載入約 100 秒＋每句 13–24 秒，比逐句呼叫省 10 分鐘以上；保留 `--line N --seed X` 支援單句重錄。
+38. **GSAP pop 元素的靜止位置要在成片上像素量測**：第三支片三處使用者回報的錯位，全部是「靜態 HTML 座標正確、成片上卻偏移」：直角記號靜止後浮在直角腿上方約 24 px、a²/b² 徽章整體偏移約 (−56,−56) px（b² 因此壓到 b 線）。靜態元素（三角形、數字）在成片上座標正確，只有 pop-in 的元素偏移——懷疑是 svgOrigin 縮放在「跳播渲染」下留下殘留矩陣。修完之後要從成片抽穩定幀、用像素量測（找橘色叢集的 bbox）驗證 pop 元素的靜止位置，不能只看 HTML。
+39. **SVG 的 scaleY 補間不要用百分比 transformOrigin**：第 3 格九格/16 格填充用 `transformOrigin: "50% 100%"` 對 SVG rect 做 scaleY，補間期間填充相對格線整批偏移一行（使用者在 25 秒看到「跑偏了一行」）。SVG 元素一律用 `svgOrigin`（絕對座標），並抽補間中段的幀確認對齊。
+40. **Windows pwsh 內嵌 python -c 反覆炸引號**：診斷時 `python -c "…"` 連續三次 ParserError（括號、冒號、字串引號被 pwsh 拆掉）。診斷腳本一律寫成臨時 .py 檔（放 `%TEMP%\opencode\`）再執行；輸出中文前先 `[Console]::OutputEncoding = UTF8` 或 `sys.stdout.reconfigure(encoding='utf-8')`。
+41. **被中斷的安裝指令要驗證目錄，不要看輸出**：`hyperframes skills update` 中斷兩次，實際上都裝完了。中斷 ≠ 失敗；用目錄清單（關鍵檔案存在與否）確認，別重跑造成重複安裝。
+

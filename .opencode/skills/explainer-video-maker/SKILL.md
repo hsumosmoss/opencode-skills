@@ -45,6 +45,7 @@ Get-ChildItem "$HOME\.claude\skills","$HOME\.agents\skills","$HOME\.config\openc
 - TTS（擇一，問使用者）：
   - **edge-tts（預設）**：`pip install edge-tts`，不需要 GPU，產生時要連網。台灣口音有 `zh-TW-HsiaoChenNeural`（女）、`zh-TW-HsiaoYuNeural`（女）、`zh-TW-YunJheNeural`（男）。
   - **Breeze TTS 2（進階）**：本機 NVIDIA GPU（約 7.7 GB VRAM，建議 12 GB 以上；模型檔約 7 GB），可以用文字描述來設計聲音，再做聲音複製，口音和情緒的控制最細。
+  - **許耀文 TTS（`xu-yaowen-tts` 技能，進階）**：VoxCPM2 聲音克隆，本機 NVIDIA GPU，用使用者自己的聲音。批次產生旁白時要把模型載入一次、逐句輸出；逐句呼叫會每句重載 4.7 GB 模型（多花約 99 秒）。
   - 其他引擎也可以：只要能為每一句輸出 `assets/voice/raw/NN.wav`。英文片可以用 HyperFrames 內建的 Kokoro／HeyGen。
 
 ## 1. 研究（有網路搜尋時）
@@ -79,6 +80,7 @@ Get-ChildItem "$HOME\.claude\skills","$HOME\.agents\skills","$HOME\.config\openc
 1. 產生 `assets/voice/raw/NN.wav`（每句一個檔，NN 是分鏡格號）：
    - **edge-tts**：`python <me>/scripts/edge_tts_voice.py --project <p> --voice zh-TW-HsiaoChenNeural [--rate=-5%]`。全片用同一個 voice，聲音天然一致；`--list zh-TW` 可以列出所有聲音。
    - **Breeze TTS 2**：`python <me>/scripts/breeze_voice.py --project <p> --breeze-repo … --model … --voice "<聲音描述>" --only-ref`，先設計**一個**參考聲音讓使用者聽，確認後再拿掉 `--only-ref` 產生全部句子（每一句都複製這個參考聲音）。如果有批次 runner，改用 `<me>/scripts/tts_jobs.py` 產生工作清單。
+   - **許耀文 TTS（`xu-yaowen-tts` 技能）**：透過該技能用 VoxCPM2 產生。批次產生時寫一個腳本**一次載入模型、逐句輸出** `assets/voice/raw/NN.wav`（實測：載入約 100 秒＋每句 13–24 秒；逐句呼叫每句多 99 秒重載模型）。單句重錄用 `--line N --seed X`，重錄後重跑 `voice_meta.py`。
    - 使用者還沒裝、或不確定要選哪一個：照 `references/tts-setup.md` 給建議，一步一步確認，不要擅自安裝。
 2. **先讓使用者試聽前一兩句**，口音與情緒由使用者用耳朵決定，不拿分數代替。不滿意就換一個 voice 或改語速，刪掉舊的 WAV 再重新產生。
    - **整支片做完才發現某個字唸錯**（例如英文品牌名、破音字）：不要整句重錄，不然那一格的動畫時間會全部跑掉。改成：同一個聲音、同一句話產生 4–6 個候選，可以換 seed，也可以換拼法，例如 `Road-ster` 或同音同調的字，字幕仍然用原文；放到 `assets/voice/fix/cand/NN_X.wav`。edge-tts 沒有 seed，用拼法、`--rate`、`--pitch` 做出差異：`python <me>/scripts/edge_tts_voice.py --project . --line N [--text "<換拼法的整句>"] [--rate=-3%] --out assets/voice/fix/cand/NN_B.wav`；Breeze 換 seed 重產同一句。然後跑 `python <me>/scripts/fix_voice.py --project . audition --line N --clauses <那個詞所在的子句>`，把關鍵片段串成一個試聽檔給使用者用耳朵選。選好之後跑 `apply --line N --take NN_X`，它會把新句子**整句等比伸縮回原本的長度**，音量對齊原本那一句，再重算那一句的字幕時間，每一格的長度不變。接著重建字幕 → `patch_captions.py` → `theme.py`（它會自動認出新字幕）→ 重新輸出。**不要把重錄的句子照停頓切成子句再對時間**：重錄的停頓位置不一樣，切點會落在字中間，結果漏字或重複（實測發生過）。ASR 只能用來篩掉明顯錯的；聲調對不對，ASR 聽不出來（實例：「輪胎」ASR 判對，使用者聽起來是錯的）。
