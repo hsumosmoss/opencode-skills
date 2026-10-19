@@ -72,3 +72,12 @@
 42. **theme.py 會把「Noto Sans TC」加進字體堆疊，卻不給 @font-face**：worker 把它當 fallback 字型用時，lint 會報 missing font-face。修法：補一條 `@font-face { font-family: "Noto Sans TC"; src: local("Noto Sans TC"); }` 進該格檔案**和** `.hyperframes/pre-theme/` 那一份；只補套色檔，下一次 theme.py 重跑就再掉一次（這次實際發生兩次：補了 → 重跑被蓋 → 再補）。
 43. **sub-agent 重寫元素會丟掉 `data-layout-allow-overlap`**：第 6 格 worker 加粗「12 m」標籤時重寫文字元素，把先前為過 check 加的 `data-layout-allow-overlap` 弄丟，check 再次報文字重疊。任何為過 check 加上的 data-* 屬性，只要 sub-agent 動過同一格，就要重新檢查還在不在；事後也要回頭想為什麼兩個文字要疊在一起——能用一個元素改色就不要疊兩個。
 
+
+## 第四支片（圓周率，8 格、102.6 秒，許耀文 VoxCPM2 配音＋CC BY 配樂）
+
+44. **「……」不是子句分隔點**：`voice_meta.py` 的切分字元是 `[，。？！；、：,.?!;:]`，`……` 不在裡面。「3.14159265……小數點後面」會被算成一個子句，字幕和動畫的索引就整體錯位。`apply_shots.py` 之前先看 `voice_meta.py` 印出的子句數，和 `shots.json` 的最大 index 對一次；對不上就先修腳本再往下。
+45. **字幕分組看的是子句，不是字數**：一個 12.8 秒、26 個字的子句會被排成單一字幕組，字級 46 px 仍然會撞到字幕帶上下緣。做法：把字幕字級降到 `clamp(36px, 3.2vw, 46px)`、行高 1.3，並在 `captions.html` 的 `GROUPS` 陣列裡把過長的組手動拆成 `14a/14b`（只改 post-theme 的檔案，不要重跑 `captions.mjs build`）。
+46. **`fromTo` 的 from 帶非零 opacity，會在 t=0 就淡淡出現**：GSAP 預設 `immediateRender: true`，第 5 格 355/113 的 `{ opacity: 0.12 }` 讓它在整段前 12 秒都以 12% 可見，像浮水印。所有「之後才進場」的 `fromTo`，from 的 opacity 一律寫 0；要保留淡入就靠 duration，不要靠起始值。
+47. **ffmpeg 混音一定要寫 `-map`**：`-i video.mp4 -i mix.wav -c:v copy -c:a aac` 沒寫 map 時，ffmpeg 會選「第一個輸入的音軌」（也就是影片原本的旁白），配樂整條被忽略，而且響度量起來一模一樣，很難發現。固定寫 `-map 0:v:0 -map 1:a:0`，混完再量一次 LUFS 確認。
+48. **畫什麼就標什麼**：第 6 格留下的是 12 邊形的痕跡，標籤卻寫「96 邊」。多邊形逼近的教學片，邊數是內容不是裝飾；與其畫 12 邊形標 96，不如標「再多邊」或「正多邊形」。標籤只能描述畫面上真的存在的東西。
+49. **審片要抽「每格進場後 0.5–1 秒」的幀**：這次的殘影只出現在每格開頭（第 5 格 50.6 秒），contact sheet 都抓場景中段，全部漏掉。每一格至少抽「進場後 0.8 秒」與「穩定後段」兩張，殘影、預先渲染的 from 狀態才看得到。
