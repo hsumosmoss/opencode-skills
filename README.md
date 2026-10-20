@@ -248,11 +248,13 @@ opacity 先從 0.35–0.45 開始；完整 alpha、ProRes 4444、WebM 與字幕�
 
 ---
 
-## 一鍵安裝腳本
+## 套件安裝指令
+
+> Repo 目前沒有獨立的 `install.ps1`／`install.sh`；以下是可手動複製貼上的安裝指令。若只使用特定 Skill，也可以只裝該 Skill 的 `requirements.txt`。
 
 ### 🍎 macOS
 ```bash
-# 安裝所有可能需要的套件（約 5 分鐘）
+# 安裝常用套件（約 5 分鐘，視網路而定）
 brew install ffmpeg node python@3.13 uv
 pip3 install edge-tts openpyxl pandas python-pptx pillow pyyaml \
              pypdf pdfplumber reportlab defusedxml playwright \
@@ -263,7 +265,7 @@ npx playwright install chromium
 
 ### 🪟 Windows
 ```powershell
-# 安裝所有可能需要的套件
+# 安裝常用套件（可依需求增減）
 winget install "FFmpeg (Essentials Build)" Python.Python.3.13 OpenJS.NodeJS.LTS
 pip install edge-tts openpyxl pandas python-pptx pillow pyyaml `
            pypdf pdfplumber reportlab defusedxml playwright `
@@ -272,7 +274,7 @@ npm install -g playwright pptxgenjs sharp puppeteer
 npx playwright install chromium
 ```
 
-> `numpy`／`scipy`／`soundfile` 是水墨短片與水墨 overlay 新增的相依。VoxCPM2 模型（約 4.7GB）與 HyperFrames CLI 不在這支一鍵安裝內，首次使用時再依對應 Skill 文件安裝。
+> `numpy`／`scipy`／`soundfile` 是水墨短片與水墨 overlay 新增的相依。VoxCPM2 模型（約 4.7GB）與 HyperFrames CLI 不在上述安裝指令內，首次使用時再依對應 Skill 文件安裝。
 
 ---
 
