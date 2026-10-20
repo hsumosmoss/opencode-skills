@@ -23,7 +23,8 @@ uv python install 3.13
 # Python 套件
 pip3 install edge-tts openpyxl pandas python-pptx pillow pyyaml \
              pypdf pdfplumber reportlab defusedxml \
-             playwright anthropic mcp
+             playwright anthropic mcp \
+             numpy scipy soundfile
 pip3 install "markitdown[pptx]"
 
 # Node.js 套件
@@ -45,7 +46,7 @@ winget install OpenJS.NodeJS.LTS
 # Python 套件
 pip install edge-tts openpyxl pandas python-pptx pillow pyyaml `
            pypdf pdfplumber reportlab defusedxml `
-           playwright anthropic mcp
+           playwright anthropic mcp numpy scipy soundfile
 pip install "markitdown[pptx]"
 
 # Node.js 套件
@@ -89,7 +90,7 @@ cp -r .opencode/skills/ ~/.config/opencode/skills/
 | `video-script-maker` | 🍎🪟 | 影片腳本前製（大綱→審校→封標檢查） | 無（純流程）|
 | `code-animation-director` | 🍎🪟 | 程式碼動畫導演（藝術風格/解說動畫） | uv, ffmpeg, Playwright Chromium |
 | `explainer-video-maker` | 🍎🪟🐧 | 原理解說動畫一條龍（研究→旁白→分格動畫→審查→MP4；收編 claude-motion-explainer） | Node 22+, ffmpeg, Python+Pillow+fonttools, Git Bash, edge-tts 或 xu-yaowen-tts（VoxCPM2）, HyperFrames CLI |
-| `ink-wash-short-film` | 🍎🪟 | 獨立完整水墨成語／故事短片（分鏡→旁白→時間軸→紙墨渲染→stills 審查→MP4） | Python 3.10+, numpy, scipy, Pillow, ffmpeg, 標楷體；旁白用 VoxCPM2/xu-yaowen-tts |
+| `ink-wash-short-film` | 🍎🪟 | 獨立完整水墨成語／故事短片（分鏡→旁白→時間軸→紙墨渲染→stills 審查→MP4） | Python 3.10+, numpy, scipy, Pillow, soundfile, ffmpeg, 標楷體；旁白用 VoxCPM2/xu-yaowen-tts |
 | `ink-wash-explainer` | 🍎🪟 | 把水墨風加進現有解說影片（L1 覆蓋／L2 插卡／L3 重繪） | Python 3, numpy, scipy, Pillow, ffmpeg；HyperFrames 專案另需 Node 22+ |
 | `animation-design-rules` | 🍎🪟🐧 | 動畫品味規則（緩動/節奏/停留/繁中排版/三色，附具體數字） | 無（純規則）|
 | `animation-review-loop` | 🍎🪟🐧 | 動畫審查循環（contact sheet 逐格對照檢查表） | Python+Pillow, ffmpeg |
@@ -177,7 +178,19 @@ cp -r .opencode/skills/ ~/.config/opencode/skills/
 
 ---
 
-## 影片製作速查（short-video-maker）
+## 影片製作速查
+
+| 需求 | 建議 Skill | 入口 |
+|------|-----------|------|
+| 實拍／錄影、活動紀錄、教學、社群短片 | `short-video-maker` | 下方最小流程 |
+| 水墨成語／故事短片（旁白＋字幕＋紙墨畫面） | `ink-wash-short-film` | [SKILL.md](.opencode/skills/ink-wash-short-film/SKILL.md) |
+| 現有解說影片／簡報／HyperFrames 加水墨 | `ink-wash-explainer` | [SKILL.md](.opencode/skills/ink-wash-explainer/SKILL.md) |
+| 原理解說動畫（研究→旁白→分格→MP4） | `explainer-video-maker` | [SKILL.md](.opencode/skills/explainer-video-maker/SKILL.md) |
+| 程式碼／藝術風格動畫 | `code-animation-director` | [SKILL.md](.opencode/skills/code-animation-director/SKILL.md) |
+| 短影音拆解→腳本 | `short-video-teardown` | [SKILL.md](.opencode/skills/short-video-teardown/SKILL.md) |
+| 只有腳本前製 | `video-script-maker` | [SKILL.md](.opencode/skills/video-script-maker/SKILL.md) |
+
+### short-video-maker 最小流程
 
 ```bash
 # 1. 產生旁白（edge-tts 男聲）
@@ -198,6 +211,41 @@ ffmpeg -y -ss 3 -i renders/*.webm -i master_audio.mp3 \
 
 > ⚠️ 踩坑紀錄見 [short-video-maker/GOTCHAS.md](.opencode/skills/short-video-maker/GOTCHAS.md)
 
+### 水墨短片最小流程
+
+```powershell
+# 1. 從模板建立專案
+Copy-Item -Recurse .opencode/skills/ink-wash-short-film/assets/project-template my-film
+cd my-film/scripts
+
+# 2. 安裝相依
+python -m pip install -r requirements.txt
+
+# 3. 先出 stills 挑畫面
+python build.py stills s1 s2 s3
+
+# 4. 出 draft，確認時間軸與字幕
+python build.py draft
+
+# 5. 定稿
+python build.py final
+```
+
+旁白放在 `scripts/tts/<scene>_<index>.wav`，`build.py` 的 `HERE` 是 `scripts/`，不是專案根。TTS 與字幕分離、只重生單句、尾端留白等規則見 [`ink-wash-short-film`](.opencode/skills/ink-wash-short-film/SKILL.md)。
+
+### 現有影片加水墨（L1 紙墨覆蓋）
+
+```powershell
+$skill = "$env:USERPROFILE\.config\opencode\skills\ink-wash-explainer"
+python "$skill\scripts\make_ink_overlay.py" --width 1920 --height 1080 --seed 7 --out-dir assets/ink-overlay
+
+ffmpeg -y -i input.mp4 -loop 1 -i assets/ink-overlay/ink_edge.png -loop 1 -i assets/ink-overlay/paper_grain.png `
+  -filter_complex "[0:v]eq=contrast=0.97:saturation=0.90:brightness=0.01[base];[1:v]format=rgba,colorchannelmixer=aa=0.45[ink];[2:v]format=rgba,colorchannelmixer=aa=0.38[paper];[base][ink]overlay=0:0:format=auto:shortest=1[v1];[v1][paper]overlay=0:0:format=auto:shortest=1,format=yuv420p[v]" `
+  -map "[v]" -map 0:a? -c:v libx264 -crf 18 -preset slow -c:a copy -movflags +faststart output_ink.mp4
+```
+
+opacity 先從 0.35–0.45 開始；完整 alpha、ProRes 4444、WebM 與字幕注意事項見 [`ffmpeg-ink.md`](.opencode/skills/ink-wash-explainer/references/ffmpeg-ink.md)。
+
 ---
 
 ## 一鍵安裝腳本
@@ -207,7 +255,8 @@ ffmpeg -y -ss 3 -i renders/*.webm -i master_audio.mp3 \
 # 安裝所有可能需要的套件（約 5 分鐘）
 brew install ffmpeg node python@3.13 uv
 pip3 install edge-tts openpyxl pandas python-pptx pillow pyyaml \
-             pypdf pdfplumber reportlab defusedxml playwright
+             pypdf pdfplumber reportlab defusedxml playwright \
+             numpy scipy soundfile
 npm install -g playwright pptxgenjs sharp puppeteer
 npx playwright install chromium
 ```
@@ -217,10 +266,13 @@ npx playwright install chromium
 # 安裝所有可能需要的套件
 winget install "FFmpeg (Essentials Build)" Python.Python.3.13 OpenJS.NodeJS.LTS
 pip install edge-tts openpyxl pandas python-pptx pillow pyyaml `
-           pypdf pdfplumber reportlab defusedxml playwright
+           pypdf pdfplumber reportlab defusedxml playwright `
+           numpy scipy soundfile
 npm install -g playwright pptxgenjs sharp puppeteer
 npx playwright install chromium
 ```
+
+> `numpy`／`scipy`／`soundfile` 是水墨短片與水墨 overlay 新增的相依。VoxCPM2 模型（約 4.7GB）與 HyperFrames CLI 不在這支一鍵安裝內，首次使用時再依對應 Skill 文件安裝。
 
 ---
 
