@@ -27,6 +27,24 @@ HyperFrames 文件教你 API，這份檔案管的是品味。底下的數字來�
 - **本檔管「品味」**：緩動、節奏、停留時間、字體、配色、中文排版。官方 `hyperframes-animation` 的 rules / blueprints 拿來用時，時間和緩動的數字仍以本檔為預設。
 - **檢查**：一律走 `animation-review-loop`，它已經包含官方的 `hyperframes check`。
 
+## 需要「具名的動作」時：`motion-prompt`（本版新增）
+
+本檔管原則（節奏、緩動、停留），`motion-prompt` 管**具名動作**：144 個動作、運鏡、UI、網頁效果與光線風格，每個都有秒數、緩動曲線與參考程式碼。分工：
+
+- **已經知道要什麼效果**，只缺名字、參數或手感 → 查 `motion-prompt`。
+- **不確定要哪個效果** → 用 `pick` 開畫廊，讓使用者自己勾，不要幫他決定。
+- **移植時只照抄時間**：秒數、延遲、緩動曲線、位移距離與角度。它的程式碼是 Canvas 2D 的 `(ctx, w, h, u)` 純函式，不能直接放進 HyperFrames；要改寫成 GSAP 的 `transform` / `opacity`，並照第 0 節的規則。
+- **`photo` pack 不是動畫**：那是生圖提示詞用的光線與風格，別把它 port 成程式。
+
+```powershell
+$mp = "$env:USERPROFILE\.config\opencode\skills\motion-prompt"
+Select-String -Path "$mp\zh\index.zh.tsv" -Pattern '轉場'   # 中文找（官方 search 只吃英日文）
+node "$mp\scripts\motion-prompt.mjs" get 129                # 規格＋程式碼
+node "$mp\scripts\motion-prompt.mjs" pick --pack motion2    # 開畫廊挑
+```
+
+人看的完整清單：`$mp\references\motion-prompt-zh.md`。
+
 ## 0. HyperFrames 的硬規則（本版新增）
 
 違反這些，畫面會在輸出時閃爍、錯位或每次結果不同：

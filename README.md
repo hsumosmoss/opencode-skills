@@ -77,7 +77,7 @@ cp -r .opencode/skills/ ~/.config/opencode/skills/
 
 ---
 
-## 所有 39 個 Skills 與依賴總表
+## 所有 40 個 Skills 與依賴總表
 
 ### 🎬 影片製作
 
@@ -91,6 +91,7 @@ cp -r .opencode/skills/ ~/.config/opencode/skills/
 | `explainer-video-maker` | 🍎🪟🐧 | 原理解說動畫一條龍（研究→旁白→分格動畫→審查→MP4；收編 claude-motion-explainer） | Node 22+, ffmpeg, Python+Pillow+fonttools, Git Bash, edge-tts 或 xu-yaowen-tts（VoxCPM2）, HyperFrames CLI |
 | `animation-design-rules` | 🍎🪟🐧 | 動畫品味規則（緩動/節奏/停留/繁中排版/三色，附具體數字） | 無（純規則）|
 | `animation-review-loop` | 🍎🪟🐧 | 動畫審查循環（contact sheet 逐格對照檢查表） | Python+Pillow, ffmpeg |
+| `motion-prompt` | 🍎🪟🐧 | 動作圖鑑（144 個動作/運鏡/轉場/UI/網頁/光線，含中文索引與速查表） | Node.js 18+；`pick` 需瀏覽器 |
 
 [^kvf]: Windows 可用（依賴均已驗證：python3/ffmpeg/node/edge-tts），但上游僅聲明 macOS/Linux 支援——文件內 bash 片段需改寫為 pwsh 等效語法，指定字型 PingFang SC 為 macOS 專有（建議於 Windows 安裝 Noto Sans SC 取得最佳效果）。
 
