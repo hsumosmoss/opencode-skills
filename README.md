@@ -77,7 +77,7 @@ cp -r .opencode/skills/ ~/.config/opencode/skills/
 
 ---
 
-## 所有 40 個 Skills 與依賴總表
+## 所有 42 個 Skills 與依賴總表
 
 ### 🎬 影片製作
 
@@ -89,6 +89,8 @@ cp -r .opencode/skills/ ~/.config/opencode/skills/
 | `video-script-maker` | 🍎🪟 | 影片腳本前製（大綱→審校→封標檢查） | 無（純流程）|
 | `code-animation-director` | 🍎🪟 | 程式碼動畫導演（藝術風格/解說動畫） | uv, ffmpeg, Playwright Chromium |
 | `explainer-video-maker` | 🍎🪟🐧 | 原理解說動畫一條龍（研究→旁白→分格動畫→審查→MP4；收編 claude-motion-explainer） | Node 22+, ffmpeg, Python+Pillow+fonttools, Git Bash, edge-tts 或 xu-yaowen-tts（VoxCPM2）, HyperFrames CLI |
+| `ink-wash-short-film` | 🍎🪟 | 獨立完整水墨成語／故事短片（分鏡→旁白→時間軸→紙墨渲染→stills 審查→MP4） | Python 3.10+, numpy, scipy, Pillow, ffmpeg, 標楷體；旁白用 VoxCPM2/xu-yaowen-tts |
+| `ink-wash-explainer` | 🍎🪟 | 把水墨風加進現有解說影片（L1 覆蓋／L2 插卡／L3 重繪） | Python 3, numpy, scipy, Pillow, ffmpeg；HyperFrames 專案另需 Node 22+ |
 | `animation-design-rules` | 🍎🪟🐧 | 動畫品味規則（緩動/節奏/停留/繁中排版/三色，附具體數字） | 無（純規則）|
 | `animation-review-loop` | 🍎🪟🐧 | 動畫審查循環（contact sheet 逐格對照檢查表） | Python+Pillow, ffmpeg |
 | `motion-prompt` | 🍎🪟🐧 | 動作圖鑑（144 個動作/運鏡/轉場/UI/網頁/光線，含中文索引與速查表） | Node.js 18+；`pick` 需瀏覽器 |
@@ -247,6 +249,14 @@ compatibility: opencode
 ```
 
 詳見 [`SKILLS.md`](SKILLS.md) 完整說明。
+
+---
+
+## 範例專案
+
+| 專案 | 說明 |
+|---|---|
+| [`kezhou-qiujian`](projects/kezhou-qiujian/) | 《刻舟求劍》52 秒水墨成語短片；`ink-wash-short-film` 的實戰案例，含 build.py、定稿 TTS、timeline 與成片 |
 
 ---
 

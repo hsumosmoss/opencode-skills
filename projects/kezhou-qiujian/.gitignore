@@ -1,0 +1,16 @@
+# 生成物與測試殘留；保留 timeline、contact sheet 與定稿 TTS
+scripts/work/part*.mp4
+scripts/work/video_hq.mp4
+scripts/work/mix.wav
+scripts/work/parts.txt
+scripts/work/stills/*.jpg
+!scripts/work/stills/contact.jpg
+scripts/tts/cand/
+scripts/tts/_review*.wav
+scripts/tts_test/
+scripts/_pron_test.json
+scripts/_split_test.json
+scripts/_zhao_test.json
+tts_ab/
+__pycache__/
+*.pyc

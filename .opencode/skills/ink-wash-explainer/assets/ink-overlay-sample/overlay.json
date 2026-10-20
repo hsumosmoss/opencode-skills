@@ -1,0 +1,14 @@
+{
+  "width": 1920,
+  "height": 1080,
+  "seed": 7,
+  "files": {
+    "ink_edge": "ink_edge.png",
+    "paper_grain": "paper_grain.png"
+  },
+  "safe_bottom": 0.1,
+  "usage": {
+    "ink_edge": "multiply 或 alpha overlay； opacity 0.35-0.6；中心透明，不會壓住字幕",
+    "paper_grain": "soft-light 或 screen； opacity 0.3-0.5；放在文字圖層下方"
+  }
+}

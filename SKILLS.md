@@ -12,7 +12,7 @@ Skills 是 OpenCode 的擴充套件，提供 AI 助手專門的知識、工作�
 3. AI 判斷使用者請求符合某個 Skill 後，才會載入完整的 `SKILL.md` 內容
 4. 可再依需求讀取配套的 scripts / references / assets
 
-## 已安裝的 Skills（40 個）
+## 已安裝的 Skills（42 個）
 
 所有 Skills 存放於 `~/.config/opencode/skills/`
 
@@ -62,6 +62,8 @@ Skills 是 OpenCode 的擴充套件，提供 AI 助手專門的知識、工作�
 | `video-script-maker` | 影片腳本前製三合一（大綱/口語化審校/封標檢查） |
 | `code-animation-director` | 程式碼動畫導演（藝術風格動畫、解說動畫；收編自 huashu-art-motion v1.2.0） |
 | `explainer-video-maker` | 原理解說動畫一條龍（研究→旁白→分格動畫→審查→MP4，基於 HyperFrames；收編 claude-motion-explainer） |
+| `ink-wash-short-film` | 獨立完整水墨成語／故事短片（分鏡→VoxCPM2 旁白→時間軸→紙墨渲染→stills 審查→MP4；含可複製專案模板與實戰坑） |
+| `ink-wash-explainer` | 把水墨風加進現有解說影片（L1 紙墨覆蓋／L2 水墨插卡／L3 重點重繪；含透明覆蓋層、HyperFrames 與 ffmpeg 合成） |
 | `animation-design-rules` | 動畫品味規則（緩動/節奏/停留/繁中排版/三色主題，附具體數字） |
 | `animation-review-loop` | 動畫審查循環（contact sheet 逐格對照檢查表，適用任何動畫管線） |
 | `motion-prompt` | 動作圖鑑（144 個動作/運鏡/轉場/UI/網頁/光線，含中文索引與 144 筆速查表；上游 MIT） |

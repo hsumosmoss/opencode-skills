@@ -1,0 +1,114 @@
+{
+  "voice": "許耀文",
+  "cfg": 2.0,
+  "timesteps": 10,
+  "seeds": [
+    3,
+    4,
+    5,
+    6
+  ],
+  "sample_rate": 48000,
+  "lines": [
+    {
+      "key": "s1_0",
+      "text": "楚國有一個人，帶著一把寶劍，搭船渡江。",
+      "speech_text": "楚國有一個人，帶著一把寶劍，搭船渡江。",
+      "duration_s": 4.64,
+      "candidates": [
+        {
+          "seed": 1,
+          "duration_s": 3.68
+        },
+        {
+          "seed": 2,
+          "duration_s": 4.64
+        },
+        {
+          "seed": 3,
+          "duration_s": 4.64
+        },
+        {
+          "seed": 4,
+          "duration_s": 4.48
+        },
+        {
+          "seed": 5,
+          "duration_s": 3.68
+        },
+        {
+          "seed": 6,
+          "duration_s": 4.32
+        }
+      ]
+    },
+    {
+      "key": "s1_1",
+      "text": "船到江心，忽然一陣搖晃，劍滑出船舷，掉進水裡。",
+      "speech_text": "船到江心，忽然一陣搖晃，劍滑出船舷，掉進水裡。",
+      "duration_s": 5.12
+    },
+    {
+      "key": "s2_0",
+      "text": "同船的人都替他著急，他卻不慌不忙，拿出小刀，在船舷上刻了一道記號。",
+      "speech_text": "同船的人都替他招急，他卻不慌不忙，拿出小刀，在船舷上刻了一道記號。",
+      "duration_s": 7.68,
+      "candidates": [
+        {
+          "seed": 1,
+          "duration_s": 7.52
+        },
+        {
+          "seed": 2,
+          "duration_s": 7.68
+        }
+      ],
+      "note": "台灣讀音 ㄓㄠ ㄐㄧ；TTS 發音稿用『招急』，字幕保留『著急』（w1 seed 2）"
+    },
+    {
+      "key": "s2_1",
+      "text": "「別急，」他說，「我的劍，就是從這裡掉下去的。」",
+      "speech_text": "「別急，」他說，「我的劍，就是從這裡掉下去的。」",
+      "duration_s": 4.48
+    },
+    {
+      "key": "s3_0",
+      "text": "船靠了岸，他才從刻記號的地方，跳下水去找。",
+      "speech_text": "船靠了岸，他才從刻記號的地方，跳下水去找。",
+      "duration_s": 4.32
+    },
+    {
+      "key": "s3_1",
+      "text": "可是船已經走了很遠，水也一直在流，劍怎麼還會留在原地呢？",
+      "speech_text": "可是船已經走了很遠，水也一直在流，劍怎麼還會留在原地呢？",
+      "duration_s": 6.4
+    },
+    {
+      "key": "s3_2",
+      "text": "用舊的記號，去找新的位置。",
+      "speech_text": "用舊的記號，去找新的位置。",
+      "duration_s": 2.88,
+      "candidates": [
+        {
+          "seed": 2,
+          "duration_s": 2.88
+        }
+      ]
+    },
+    {
+      "key": "s3_3",
+      "text": "這就叫做「刻舟求劍」。",
+      "speech_text": "這就叫做「刻舟求劍」。",
+      "duration_s": 2.4,
+      "candidates": [
+        {
+          "seed": 7,
+          "duration_s": 2.4
+        }
+      ]
+    }
+  ],
+  "selected": {
+    "s2_0": 2
+  }
+}
