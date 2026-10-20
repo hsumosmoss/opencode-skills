@@ -1,3 +1,8 @@
 .DS_Store
 *.gguf
 video-maker/
+
+# 本機備份與暫存（motion-prompt 同步時產生）
+.opencode/skills/motion-prompt/zh/backup/
+__pycache__/
+*.pyc
